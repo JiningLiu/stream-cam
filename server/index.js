@@ -19,32 +19,26 @@ wss.on("connection", function connection(ws) {
 
     switch (message) {
       case "on": {
-        sh("cam");
+        sh("~/stream-cam/mediamtx &", ws);
         console.log("================================");
         console.log("Camera On command executed.");
+        break;
       }
 
       case "off": {
-        sh("killall mediamtx");
+        sh("killall mediamtx", ws);
         console.log("================================");
         console.log("Camera Off command executed.");
+        break;
       }
 
       case "reboot": {
         sh("sudo reboot");
+        break;
       }
 
       case "status": {
-        console.log("================================");
-        console.log("Status requested. IP: " + ws._socket.remoteAddress);
-        (async () => {
-          const result = await exec("pgrep mediamtx");
-          if (result.exitCode === 0) {
-            ws.send("on");
-          } else {
-            ws.send("off");
-          }
-        })();
+        status(ws);
         break;
       }
     }
@@ -58,10 +52,24 @@ wss.on("connection", function connection(ws) {
   });
 });
 
-function sh(command) {
+function sh(command, ws) {
   (async () => {
     const result = exec(command);
-    console.log(result);
+    console.log("Command exit code: " + result.exitCode);
+    status(ws);
+  })();
+}
+
+function status(ws) {
+  console.log("================================");
+  console.log("Status requested. IP: " + ws._socket.remoteAddress);
+  (async () => {
+    const result = await exec("pgrep mediamtx");
+    if (result.exitCode === 0) {
+      ws.send("on");
+    } else {
+      ws.send("off");
+    }
   })();
 }
 

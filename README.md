@@ -55,9 +55,14 @@ nvm install --lts
 echo "alias serve='node ~/stream-cam/server/index.js &'" >> ~/.bashrc
 echo "alias cam='~/stream-cam/mediamtx &'" >> ~/.bashrc
 echo "alias stop='killall node & killall mediamtx'" >> ~/.bashrc
-echo "serve" >> ~/.bashrc
+source ~/.bashrc
 
 git clone https://github.com/JiningLiu/stream-cam/
+
+cd stream-cam/server
+npm i
+
+echo "serve" >> ~/.bashrc
 
 sudo reboot
 ```
