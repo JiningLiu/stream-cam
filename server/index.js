@@ -56,7 +56,9 @@ function sh(command, ws) {
   (async () => {
     const result = exec(command);
     console.log("Command exit code: " + result.exitCode);
-    status(ws);
+    setTimeout(() => {
+      status(ws);
+    }, 500);
   })();
 }
 
