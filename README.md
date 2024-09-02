@@ -55,7 +55,7 @@ nvm install --lts
 echo "alias serve='node ~/stream-cam/server/index.js &'" >> ~/.bashrc
 echo "alias cam='~/stream-cam/mediamtx'" >> ~/.bashrc
 echo "alias stop='killall node & killall mediamtx'" >> ~/.bashrc
-echo "alias update='cd ~/stream-cam/ && git pull && cd server && npm i'" >> ~/.bashrc
+echo "alias update='cd ~/stream-cam/ && git pull && cp mediamtx.yml ~/mediamtx.yml && cd server && npm i'" >> ~/.bashrc
 source ~/.bashrc
 
 cd ~/

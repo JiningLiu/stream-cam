@@ -19,16 +19,16 @@ wss.on("connection", function connection(ws) {
 
     switch (message) {
       case "on": {
-        sh("~/stream-cam/mediamtx &", ws);
         console.log("================================");
-        console.log("Camera On command executed.");
+        console.log("Executing camera on command. IP: " + ws._socket.remoteAddress);
+        sh("~/stream-cam/mediamtx &", ws);
         break;
       }
 
       case "off": {
-        sh("killall mediamtx", ws);
         console.log("================================");
-        console.log("Camera Off command executed.");
+        console.log("Executing camera off command. IP: " + ws._socket.remoteAddress);
+        sh("killall mediamtx", ws);
         break;
       }
 
@@ -53,26 +53,20 @@ wss.on("connection", function connection(ws) {
 });
 
 function sh(command, ws) {
-  (async () => {
-    const result = exec(command);
-    console.log("Command exit code: " + result.exitCode);
-    setTimeout(() => {
-      status(ws);
-    }, 500);
-  })();
+  exec(command);
+  status(ws)
 }
 
 function status(ws) {
   console.log("================================");
-  console.log("Status requested. IP: " + ws._socket.remoteAddress);
-  (async () => {
-    const result = await exec("pgrep mediamtx");
-    if (result.exitCode === 0) {
-      ws.send("on");
-    } else {
+  exec("pgrep mediamtx", (error, stdout, stderr) => {
+    console.log("Status requested: " + (error ? "off" : "on") + ". IP: " + ws._socket.remoteAddress);
+    if (error) {
       ws.send("off");
+    } else {
+      ws.send("on");
     }
-  })();
+  });
 }
 
 console.log("================================");
