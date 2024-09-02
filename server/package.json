@@ -1,0 +1,22 @@
+{
+  "name": "stream-cam",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JiningLiu/stream-cam.git"
+  },
+  "author": "Jining Liu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JiningLiu/stream-cam/issues"
+  },
+  "homepage": "https://github.com/JiningLiu/stream-cam#readme",
+  "description": "",
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}
