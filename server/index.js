@@ -6,7 +6,7 @@ const { exec } = require("child_process");
 
 const WebSocket = require("ws");
 const wss = new WebSocket.Server({ port: 3000 });
-const clients = [];
+let clients = [];
 
 wss.on("connection", function connection(ws) {
   clients.push(ws);

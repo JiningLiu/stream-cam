@@ -53,11 +53,13 @@ curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
 nvm install --lts
 
 echo "alias serve='node ~/stream-cam/server/index.js &'" >> ~/.bashrc
-echo "alias cam='~/stream-cam/mediamtx &'" >> ~/.bashrc
+echo "alias cam='~/stream-cam/mediamtx'" >> ~/.bashrc
 echo "alias stop='killall node & killall mediamtx'" >> ~/.bashrc
 source ~/.bashrc
 
+cd ~/
 git clone https://github.com/JiningLiu/stream-cam/
+cp stream-cam/mediamtx.yml mediamtx.yml
 
 cd stream-cam/server
 npm i
