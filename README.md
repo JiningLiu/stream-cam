@@ -32,10 +32,15 @@ Put together the setup according to the [assembly instructions](./hardware/ASSEM
 
 Use the [Raspberry Pi Imager](https://www.raspberrypi.com/software/) to flash SD card with [Raspberry Pi OS](https://www.raspberrypi.com/software/operating-systems/) (64-bit) with desktop ([version used for this release](https://downloads.raspberrypi.com/raspios_arm64/images/raspios_arm64-2024-07-04/2024-07-04-raspios-bookworm-arm64.img.xz))
 - Setup SSH in Raspberry Pi Imager settings.
+- Setup the Wi-Fi (wireless LAN) network that the Pi will be streaming video over.
 
-Note that the commands below will take a bit of time to run.
+Connect your computer to the same network you have just configured for the Pi. Then, plug in the Pi and wait a few minutes for initial setup to complete.
+
+Use SSH to connect to the Pi with the credentials you have setup earlier. If you are unable to connect to the Pi over Wi-Fi, try using ethernet.
 
 #### Follow these steps to finish setup.
+
+Note that the commands below will take a bit of time to run.
 
 ```bash
 sudo raspi-config
@@ -72,6 +77,6 @@ sudo reboot
 
 Your Pi will now reboot, and automatically start the server when it's on.
 
-Now, connect to your Pi using VNC. From the GUI, add the Wi-Fi network that you would like to use for video transmission.
+If you had previously used ethernet to connect to the Pi, you can now use VNC to access the GUI, and add the Wi-Fi network that you would like to use for video transmission.
 
 Your Pi is now ready for live streaming!
