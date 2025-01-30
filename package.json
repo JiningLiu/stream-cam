@@ -2,10 +2,18 @@
   "name": "stream-cam",
   "module": "server.ts",
   "type": "module",
+  "scripts": {
+    "start": "echo 'Starting stream-cam servers...' && bun server.ts & bun uiServer.ts &",
+    "stop": "echo 'Stopping stream-cam servers...' && lsof -i tcp:80 | awk 'NR!=1 {print $2}' | xargs kill && lsof -i tcp:20240 | awk 'NR!=1 {print $2}' | xargs kill"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "uuid": "^11.0.5",
+    "yaml": "^2.7.0"
   }
 }

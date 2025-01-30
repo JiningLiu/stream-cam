@@ -1,5 +1,5 @@
 <h1 align="center">
-stream-cam
+▶️ stream-cam
 </h1>
 
 <p align="center">
@@ -8,12 +8,22 @@ stream-cam
 </b>
 </p>
 
-> ### This project is in early development. Please check back in the future for more information.
+> ### 🚧 This project is in early development. Please check back in the future for more information.
 
-> For the original stream-cam project, visit [JiningLiu/stream-cam-legacy](https://github.com/JiningLiu/stream-cam-legacy)
+> ⚠️ For the **original** stream-cam project, visit [JiningLiu/stream-cam-legacy](https://github.com/JiningLiu/stream-cam-legacy)
 
-## License
+## Licenses
 
-Open source information to come.
+### Credits
+
+[bluenviron/mediamtx](https://github.com/bluenviron/mediamtx) ([MIT License](https://github.com/bluenviron/mediamtx/blob/main/LICENSE))
+
+[eemeli/yaml](https://github.com/eemeli/yaml) ([ISC License](https://github.com/eemeli/yaml/blob/main/LICENSE))
+
+[uuidjs/uuid](https://github.com/uuidjs/uuid) ([MIT License](https://github.com/uuidjs/uuid/blob/main/LICENSE.md))
+
+### stream-cam
+
+Open source information to come. Planned release under the MIT License.
 
 © 2024-2025 Jining Liu, FTC Team 20240 Slingshot, and contributors. All rights reserved.
