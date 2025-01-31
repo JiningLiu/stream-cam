@@ -220,7 +220,7 @@ playbackTrustedProxies: []
 # Global settings -> RTSP server
 
 # Enable publishing and reading streams with the RTSP protocol.
-rtsp: yes
+rtsp: true
 # List of enabled RTSP transport protocols.
 # UDP is the most performant, but doesn't work when there's a NAT/firewall between
 # server and clients, and doesn't support encryption.
@@ -260,7 +260,7 @@ rtspAuthMethods: [basic]
 # Global settings -> RTMP server
 
 # Enable publishing and reading streams with the RTMP protocol.
-rtmp: yes
+rtmp: true
 # Address of the RTMP listener. This is needed only when encryption is "no" or "optional".
 rtmpAddress: :1935
 # Encrypt connections with TLS (RTMPS).
@@ -280,7 +280,7 @@ rtmpServerCert: server.crt
 # Global settings -> HLS server
 
 # Enable reading streams with the HLS protocol.
-hls: yes
+hls: true
 # Address of the HLS listener.
 hlsAddress: :8888
 # Enable TLS/HTTPS on the HLS server.
@@ -515,7 +515,7 @@ pathDefaults:
   # Height of frames
   rpiCameraHeight: 1080
   # Flip horizontally
-  rpiCameraHFlip: false
+  rpiCameraHFlip: true
   # Flip vertically
   rpiCameraVFlip: true
   # Brightness [-1, 1]
@@ -525,7 +525,7 @@ pathDefaults:
   # Saturation [0, 16]
   rpiCameraSaturation: 1
   # Sharpness [0, 16]
-  rpiCameraSharpness: 1
+  rpiCameraSharpness: 2
   # Exposure mode.
   # values: normal, short, long, custom
   rpiCameraExposure: normal
@@ -537,7 +537,7 @@ pathDefaults:
   rpiCameraAWBGains: [0, 0]
   # Denoise operating mode.
   # values: off, cdn_off, cdn_fast, cdn_hq
-  rpiCameraDenoise: "off"
+  rpiCameraDenoise: "cdn_off"
   # Fixed shutter speed, in microseconds.
   rpiCameraShutter: 0
   # Metering mode of the AEC/AGC algorithm.
@@ -546,7 +546,7 @@ pathDefaults:
   # Fixed gain
   rpiCameraGain: 0
   # EV compensation of the image [-10, 10]
-  rpiCameraEV: 0
+  rpiCameraEV: -0.3
   # Region of interest, in format x,y,width,height (all normalized between 0 and 1)
   rpiCameraROI:
   # Whether to enable HDR on Raspberry Camera 3.
@@ -563,10 +563,10 @@ pathDefaults:
   rpiCameraAfMode: continuous
   # Autofocus range
   # values: normal, macro, full
-  rpiCameraAfRange: normal
+  rpiCameraAfRange: full
   # Autofocus speed
   # values: normal, fast
-  rpiCameraAfSpeed: normal
+  rpiCameraAfSpeed: fast
   # Lens position (for manual autofocus only), will be set to focus to a specific distance
   # calculated by the following formula: d = 1 / value
   # Examples: 0 moves the lens to infinity.
@@ -588,7 +588,7 @@ pathDefaults:
   # Period between IDR frames
   rpiCameraIDRPeriod: 60
   # Bitrate
-  rpiCameraBitrate: 5000000
+  rpiCameraBitrate: 10000000
   # H264 profile
   rpiCameraProfile: main
   # H264 level
@@ -699,8 +699,17 @@ paths:
   # example:
   # my_camera:
   #   source: rtsp://my_camera
+  
   cam:
     source: rpiCamera
+    
+  cam_with_audio:
+    runOnInit: >
+      gst-launch-1.0
+      rtspclientsink name=s location=rtsp://localhost:$RTSP_PORT/cam_with_audio
+      rtspsrc location=rtsp://127.0.0.1:$RTSP_PORT/cam latency=0 ! rtph264depay ! s.
+      alsasrc device=pulse ! opusenc bitrate=16000 ! s.
+    runOnInitRestart: yes
 
   # Settings under path "all_others" are applied to all paths that
   # do not match another entry.

@@ -15,7 +15,7 @@ export class CameraSettings {
   camId: number = 0;
   width: number = 1920;
   height: number = 1080;
-  hFlip: boolean = false;
+  hFlip: boolean = true;
   vFlip: boolean = true;
   brightness: number = 0;
   contrast: number = 1;
@@ -28,15 +28,15 @@ export class CameraSettings {
   shutterSpeed: number = 0;
   metering: Metering = Metering.centre;
   gain: number = 0;
-  ev: number = 0;
+  ev: number = -0.3;
   roi?: ROI;
   hdr: boolean = false;
   tuningFile?: string;
   sensorMode?: SensorMode;
   fps: number = 30;
   focusMode: FocusMode = FocusMode.continuous;
-  afRange: AFRange = AFRange.normal;
-  afSpeed: AFSpeed = AFSpeed.normal;
+  afRange: AFRange = AFRange.full;
+  afSpeed: AFSpeed = AFSpeed.fast;
   mfLensPosition: number = 0;
   afWindow?: AFWindow;
   flickerPeriod: number = 0;
@@ -44,7 +44,7 @@ export class CameraSettings {
   textOverlay: string = "%Y-%m-%d %H:%M:%S - stream-cam (MediaMTX)";
   codec: Codec = Codec.auto;
   idrPeriod: number = 60;
-  bitrate: number = 5000000;
+  bitrate: number = 10000000;
   h254Profile: string = "main";
   h264Level: string = "4.1";
 }

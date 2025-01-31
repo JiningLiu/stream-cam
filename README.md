@@ -18,6 +18,8 @@
 
 [bluenviron/mediamtx](https://github.com/bluenviron/mediamtx) ([MIT License](https://github.com/bluenviron/mediamtx/blob/main/LICENSE))
 
+[gdzx/audiosource](https://github.com/gdzx/audiosource) ([MIT License](https://github.com/gdzx/audiosource/blob/master/LICENSE))
+
 [eemeli/yaml](https://github.com/eemeli/yaml) ([ISC License](https://github.com/eemeli/yaml/blob/main/LICENSE))
 
 [uuidjs/uuid](https://github.com/uuidjs/uuid) ([MIT License](https://github.com/uuidjs/uuid/blob/main/LICENSE.md))

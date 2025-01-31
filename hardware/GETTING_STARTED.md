@@ -3,5 +3,5 @@
 </p>
 
 <h1 align="center">
-  Assembly 🛠️
+  Getting Started ⏩
 </h1>
