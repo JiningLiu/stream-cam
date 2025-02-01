@@ -10,17 +10,54 @@
 // A free & (planned) open source project created by Jining Liu.
 // ****************************************************************
 
-import { $ } from "bun";
+import { $, serve } from "bun";
 
-import { CameraSettings } from "./supplements/CameraSettings";
+import { CameraSettings } from "./supplements/handlers/CameraSettings";
+import { Statics } from "./supplements/handlers/Statics";
 
 await $`lsof -i tcp:20240 | awk 'NR!=1 {print $2}' | xargs kill`;
 
-const server = Bun.serve({
+const camSettings = new CameraSettings();
+const statics = new Statics();
+
+const server = serve({
   port: 20240,
-  fetch(req) {
-    return new Response(
-      `CameraSettings: ${JSON.stringify(new CameraSettings())}`
-    );
+
+  async fetch(req) {
+    const url = new URL(req.url);
+
+    // Static files & assets
+    if (req.method === "GET") return getHandler(req, url.pathname);
+
+    // POST requests
+    if (req.method === "POST") return postHandler(req, url.pathname);
+
+    return new Response("404 Not Found", { status: 404 });
   },
 });
+
+// MARK: GET requst handlers
+async function getHandler(req: Request, path: string): Promise<Response> {
+  switch (path) {
+    case "/mediamtx.yml":
+      return await statics.mediamtxYml();
+    case "/camera/settings/get":
+      return await camSettings.get(req);
+      case "/camera/settings/current":
+        return await camSettings.current();
+    default:
+      return new Response("404 Not Found", { status: 404 });
+  }
+}
+
+// MARK: POST requst handlers
+async function postHandler(req: Request, path: string): Promise<Response> {
+  switch (path) {
+    case "/camera/settings/add":
+      return await camSettings.add(req);
+    case "/camera/settings/set":
+      return await camSettings.set(req);
+    default:
+      return new Response("404 Not Found", { status: 404 });
+  }
+}

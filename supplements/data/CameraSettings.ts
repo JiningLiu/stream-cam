@@ -1,12 +1,11 @@
 // ****************************************************************
-// stream-cam server supplement
+// stream-cam server supplement - data
 // CameraSettings
 // ****************************************************************
 
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 export class CameraSettings {
-
   // Identification
   id: string = `${uuidv4()}-${Date.now()}`;
   name: string = "untitled settings";
@@ -47,13 +46,59 @@ export class CameraSettings {
   bitrate: number = 10000000;
   h254Profile: string = "main";
   h264Level: string = "4.1";
+
+  constructor(init?: Partial<CameraSettings>) {
+    Object.assign(this, init);
+  }
+}
+
+export function conformsCameraSettings(obj: any): obj is CameraSettings {
+  return (
+    typeof obj.id === "string" &&
+    typeof obj.name === "string" &&
+    typeof obj.camId === "number" &&
+    typeof obj.width === "number" &&
+    typeof obj.height === "number" &&
+    typeof obj.hFlip === "boolean" &&
+    typeof obj.vFlip === "boolean" &&
+    typeof obj.brightness === "number" &&
+    typeof obj.contrast === "number" &&
+    typeof obj.saturation === "number" &&
+    typeof obj.sharpness === "number" &&
+    Object.values(Exposure).includes(obj.exposure) &&
+    Object.values(WhiteBalance).includes(obj.whiteBalance) &&
+    conformsAWBGains(obj.awbGains) &&
+    Object.values(Denoise).includes(obj.denoise) &&
+    typeof obj.shutterSpeed === "number" &&
+    Object.values(Metering).includes(obj.metering) &&
+    typeof obj.gain === "number" &&
+    typeof obj.ev === "number" &&
+    (obj.roi === undefined || conformsROI(obj.roi)) &&
+    typeof obj.hdr === "boolean" &&
+    (obj.tuningFile === undefined || typeof obj.tuningFile === "string") &&
+    (obj.sensorMode === undefined || conformsSensorMode(obj.sensorMode)) &&
+    typeof obj.fps === "number" &&
+    Object.values(FocusMode).includes(obj.focusMode) &&
+    Object.values(AFRange).includes(obj.afRange) &&
+    Object.values(AFSpeed).includes(obj.afSpeed) &&
+    typeof obj.mfLensPosition === "number" &&
+    (obj.afWindow === undefined || conformsAFWindow(obj.afWindow)) &&
+    typeof obj.flickerPeriod === "number" &&
+    typeof obj.textOverlayEnable === "boolean" &&
+    typeof obj.textOverlay === "string" &&
+    Object.values(Codec).includes(obj.codec) &&
+    typeof obj.idrPeriod === "number" &&
+    typeof obj.bitrate === "number" &&
+    typeof obj.h254Profile === "string" &&
+    typeof obj.h264Level === "string"
+  );
 }
 
 enum Exposure {
   normal = "normal",
   short = "short",
   long = "long",
-  custom = "custom"
+  custom = "custom",
 }
 
 enum WhiteBalance {
@@ -64,7 +109,7 @@ enum WhiteBalance {
   indoor = "indoor",
   daylight = "daylight",
   cloudy = "cloudy",
-  custom = "custom"
+  custom = "custom",
 }
 
 class AWBGains {
@@ -72,18 +117,22 @@ class AWBGains {
   blue: number = 0;
 }
 
+export function conformsAWBGains(obj: any): obj is AWBGains {
+  return typeof obj.red === "number" && typeof obj.blue === "number";
+}
+
 enum Denoise {
   off = "off",
   cdnOff = "cdn_off",
   cdnFast = "cdn_fast",
-  cdnHq = "cdn_hq"
+  cdnHq = "cdn_hq",
 }
 
 enum Metering {
   centre = "centre",
   spot = "spot",
   matrix = "matrix",
-  custom = "custom"
+  custom = "custom",
 }
 
 class ROI {
@@ -93,6 +142,15 @@ class ROI {
   height: number = 0;
 }
 
+export function conformsROI(obj: any): obj is ROI {
+  return (
+    typeof obj.x === "number" &&
+    typeof obj.y === "number" &&
+    typeof obj.width === "number" &&
+    typeof obj.height === "number"
+  );
+}
+
 class SensorMode {
   width: number = 0;
   height: number = 0;
@@ -100,21 +158,30 @@ class SensorMode {
   packing: number = 0;
 }
 
+export function conformsSensorMode(obj: any): obj is SensorMode {
+  return (
+    typeof obj.width === "number" &&
+    typeof obj.height === "number" &&
+    typeof obj.bitDepth === "number" &&
+    typeof obj.packing === "number"
+  );
+}
+
 enum FocusMode {
   auto = "auto",
   manual = "manual",
-  continuous = "continuous"
+  continuous = "continuous",
 }
 
 enum AFRange {
   normal = "normal",
   macro = "macro",
-  full = "full"
+  full = "full",
 }
 
 enum AFSpeed {
   normal = "normal",
-  fast = "fast"
+  fast = "fast",
 }
 
 class AFWindow {
@@ -124,10 +191,19 @@ class AFWindow {
   height: number = 0;
 }
 
+export function conformsAFWindow(obj: any): obj is AFWindow {
+  return (
+    typeof obj.x === "number" &&
+    typeof obj.y === "number" &&
+    typeof obj.width === "number" &&
+    typeof obj.height === "number"
+  );
+}
+
 enum Codec {
   auto = "auto",
   hardwareH264 = "hardwareH264",
-  softwareH264 = "softwareH264"
+  softwareH264 = "softwareH264",
 }
 
 // mediamtx.yml settings
