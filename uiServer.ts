@@ -10,19 +10,33 @@
 // A free & (planned) open source project created by Jining Liu.
 // ****************************************************************
 
-import { $ } from "bun";
+import { $, env } from "bun";
 
-await $`lsof -i tcp:80 | awk 'NR!=1 {print $2}' | xargs kill`;
+const port = env.PORT || 80;
 
-const ui = Bun.serve({
-  port: 80,
-  async fetch(req) {
-    const serverRes = await fetch("http://localhost:20240").then((res) =>
-      res.text()
-    );
+try {
+  const result = await $`lsof -i :${port}`;
+  if (result.stdout.toString().trim().length > 0) {
+    if (
+      prompt(`Port ${port} is already in use. Kill the process? (y/n)`) === "y"
+    ) {
+      await $`sudo fuser -k ${port}/tcp`;
+    } else {
+      process.exit(1);
+    }
+  }
+} catch {
+} finally {
+  const server = Bun.serve({
+    port: port,
+    async fetch(req) {
+      const serverRes = await fetch("http://localhost:20240").then((res) =>
+        res.text()
+      );
 
-    return new Response(
-      `stream-cam development: ui\n\n****************************************************************\n\nserver response:\n\n${serverRes}`
-    );
-  },
-});
+      return new Response(
+        `stream-cam development: ui\n\n****************************************************************\n\nserver response:\n\n${serverRes}`
+      );
+    },
+  });
+}

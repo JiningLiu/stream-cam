@@ -33,6 +33,14 @@ bun start
 bun prep
 ```
 
+## Installation
+
+> ❗ This script installs the latest version in the **development** branch. Please only use for testing purposes.
+
+```bash
+curl https://raw.githubusercontent.com/JiningLiu/stream-cam/refs/heads/dev/install.sh | bash
+```
+
 ## Licenses
 
 ### Credits

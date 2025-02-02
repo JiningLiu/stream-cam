@@ -171,6 +171,18 @@ export abstract class CameraSettings {
         let save = YAML.stringify(newConfig)
           .replaceAll("null", "")
           .replace(
+            /rtmpEncryption:\s*(\S+)/,
+            (_match, p1) => `rtmpEncryption: "${p1}"`
+          )
+          .replace(
+            /rtspEncryption:\s*(\S+)/,
+            (_match, p1) => `rtspEncryption: "${p1}"`
+          )
+          .replace(
+            /rpiCameraDenoise:\s*(\S+)/,
+            (_match, p1) => `rpiCameraDenoise: "${p1}"`
+          )
+          .replace(
             /rpiCameraAWBGains:\s*"(\[.*\])"/,
             (_match, p1) => `rpiCameraAWBGains: ${p1}`
           )

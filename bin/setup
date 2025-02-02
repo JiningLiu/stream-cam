@@ -11,15 +11,15 @@
 # A free & (planned) open source project created by Jining Liu.
 # ****************************************************************
 
-chmod a+x ./update.sh ./audiosource
+cd ~/stream-cam
+
+chmod -R a+x bin/*
 
 bun i
 
-echo "alias start='cd ~/stream-cam && bun start'" >> ~/.bashrc
-echo "alias dev='cd ~/stream-cam && bun dev'" >> ~/.bashrc
-echo "alias stop='cd ~/stream-cam && bun stop'" >> ~/.bashrc
-echo "alias update='~/stream-cam/update.sh'" >> ~/.bashrc
-
+echo -en '\n' >> ~/.bashrc
+echo "# stream-cam" >> ~/.bashrc
+echo "export PATH=~/stream-cam/bin:$PATH" >> ~/.bashrc
 echo "start" >> ~/.bashrc
 
 sudo reboot
