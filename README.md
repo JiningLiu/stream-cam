@@ -12,6 +12,27 @@
 
 > ⚠️ For the **original** stream-cam project, visit [JiningLiu/stream-cam-legacy](https://github.com/JiningLiu/stream-cam-legacy)
 
+## Development
+
+```bash
+# install depenncies
+bun i
+
+# run in development environment
+bun dev
+
+# run in production environment
+bun start
+```
+
+### Before Commits
+
+> ‼️ This is **very important** to avoid testing data from being pushed
+
+```bash
+bun prep
+```
+
 ## Licenses
 
 ### Credits

@@ -15,13 +15,20 @@ import {
 import { Log } from "../debug/Log";
 
 const dflt = YAML.parse(
-  await file("./mediamtx/default.yml").text()
+  await file("./mediamtx/config/default.yml").text()
 ) as MediaMTXConfig;
 
-export class CameraSettings {
+const existing = await file("./mediamtx/config/settings.json").json();
+const currentId = await file("./mediamtx/config/current.txt").text();
+
+export abstract class CameraSettings {
+  private static _settings: Settings[] = existing;
+  private static _current?: string =
+    currentId.length > 0 ? currentId : undefined;
+
   // MARK: External
 
-  async get(req: Request): Promise<Response> {
+  static async get(req: Request): Promise<Response> {
     const data = await new URLSearchParams(req.url.split("?")[1]).get("id");
 
     const settings = this._settings.find((settings) => settings.id === data);
@@ -33,10 +40,8 @@ export class CameraSettings {
     return new Response("404 Not Found", { status: 404 });
   }
 
-  async current(): Promise<Response> {
-    const settings = this._settings.find(
-      (settings) => settings.id === this._current
-    );
+  static async current(): Promise<Response> {
+    const settings = this.currentSettings;
 
     if (settings) {
       return new Response(JSON.stringify(settings), { status: 200 });
@@ -45,18 +50,19 @@ export class CameraSettings {
     return new Response("404 Not Found", { status: 404 });
   }
 
-  async add(req: Request): Promise<Response> {
+  static async add(req: Request): Promise<Response> {
     const data = await req.json();
 
     if (conformsCameraSettings(data)) {
-      this.addSettings(data);
-      return new Response("200 OK", { status: 200 });
+      if (await this.addSettings(data)) {
+        return new Response("200 OK", { status: 200 });
+      }
     }
 
     return new Response("400 Bad Request", { status: 400 });
   }
 
-  async set(req: Request): Promise<Response> {
+  static async set(req: Request): Promise<Response> {
     const data = await req.text();
 
     if (await this.setSettings(data)) {
@@ -68,34 +74,48 @@ export class CameraSettings {
 
   // MARK: Internal
 
-  private _settings: Settings[] = [];
-  private _current?: string;
-
-  private get settings(): Settings[] {
+  private static get settings(): Settings[] {
     return this._settings;
   }
 
-  private get currentSettings(): Settings | undefined {
+  private static get currentSettings(): Settings | undefined {
     return this._settings.find((settings) => settings.id === this._current);
   }
 
-  private addSettings(settings: Settings): void {
+  private static async addSettings(settings: Settings): Promise<boolean> {
     this._settings.push(settings);
+    return await this.saveSettings();
   }
 
-  private removeSettings(id: string): void {
+  private static async removeSettings(id: string): Promise<boolean> {
     this._settings = this._settings.filter((settings) => settings.id !== id);
+    return await this.saveSettings();
   }
 
-  private updateSettings(id: string, newSettings: Settings): void {
+  private static async updateSettings(
+    id: string,
+    newSettings: Settings
+  ): Promise<boolean> {
     const index = this._settings.findIndex((settings) => settings.id === id);
 
     if (index !== -1) {
       this._settings[index] = newSettings;
     }
+
+    return await this.saveSettings();
   }
 
-  private async setSettings(id: string): Promise<boolean> {
+  private static async saveSettings(): Promise<boolean> {
+    const save = JSON.stringify(this._settings);
+    await write(file("./mediamtx/config/settings.json"), save);
+    if ((await file("./mediamtx/config/settings.json").text()) === save) {
+      return true;
+    }
+
+    return false;
+  }
+
+  private static async setSettings(id: string): Promise<boolean> {
     const settings = this._settings.find((settings) => settings.id === id);
     if (settings) {
       let newConfig = dflt;
@@ -167,8 +187,9 @@ export class CameraSettings {
             (_match, p1) => `rpiCameraAfWindow: ${p1}`
           );
 
-        await write(file("./mediamtx.yml"), save);
-        if ((await file("./mediamtx.yml").text()) === save) {
+        await write(file("mediamtx.yml"), save);
+        await write(file("./mediamtx/config/current.txt"), id);
+        if ((await file("mediamtx.yml").text()) === save) {
           this._current = id;
           return true;
         }

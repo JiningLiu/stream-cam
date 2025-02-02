@@ -5,8 +5,8 @@
 
 import { file } from "bun";
 
-export class Statics {
-  async mediamtxYml(): Promise<Response> {
+export abstract class Statics {
+  static async mediamtxYml(): Promise<Response> {
     const yml = file("mediamtx.yml");
 
     if (await yml.exists()) {
