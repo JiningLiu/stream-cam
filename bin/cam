@@ -1,0 +1,21 @@
+#!/bin/bash
+# ****************************************************************
+# stream-cam scripts
+# cam
+# ****************************************************************
+
+case "$1" in
+  on)
+    cd ~/stream-cam
+    ./audiosource run &
+    ./mediamtx/mediamtx &
+    ;;
+  off)
+    pgrep -f "audiosource" | xargs kill
+    pgrep -f "mediamtx" | xargs kill
+    ;;
+  *)
+    echo "Usage: cam {on|off}"
+    exit 1
+    ;;
+esac
