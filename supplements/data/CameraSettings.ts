@@ -5,6 +5,8 @@
 
 import { v4 as uuidv4 } from "uuid";
 
+import { Log } from "../debug/Log";
+
 export class CameraSettings {
   // Identification
   id: string = `${uuidv4()}-${Date.now()}`;
@@ -44,7 +46,7 @@ export class CameraSettings {
   codec: Codec = Codec.auto;
   idrPeriod: number = 60;
   bitrate: number = 10000000;
-  h254Profile: string = "main";
+  h264Profile: string = "main";
   h264Level: string = "4.1";
 
   constructor(init?: Partial<CameraSettings>) {
@@ -89,19 +91,19 @@ export function conformsCameraSettings(obj: any): obj is CameraSettings {
     Object.values(Codec).includes(obj.codec) &&
     typeof obj.idrPeriod === "number" &&
     typeof obj.bitrate === "number" &&
-    typeof obj.h254Profile === "string" &&
+    typeof obj.h264Profile === "string" &&
     typeof obj.h264Level === "string"
   );
 }
 
-enum Exposure {
+export enum Exposure {
   normal = "normal",
   short = "short",
   long = "long",
   custom = "custom",
 }
 
-enum WhiteBalance {
+export enum WhiteBalance {
   auto = "auto",
   incandescent = "incandescent",
   tungsten = "tungsten",
@@ -112,7 +114,7 @@ enum WhiteBalance {
   custom = "custom",
 }
 
-class AWBGains {
+export class AWBGains {
   red: number = 0;
   blue: number = 0;
 }
@@ -121,21 +123,21 @@ export function conformsAWBGains(obj: any): obj is AWBGains {
   return typeof obj.red === "number" && typeof obj.blue === "number";
 }
 
-enum Denoise {
+export enum Denoise {
   off = "off",
   cdnOff = "cdn_off",
   cdnFast = "cdn_fast",
   cdnHq = "cdn_hq",
 }
 
-enum Metering {
+export enum Metering {
   centre = "centre",
   spot = "spot",
   matrix = "matrix",
   custom = "custom",
 }
 
-class ROI {
+export class ROI {
   x: number = 0;
   y: number = 0;
   width: number = 0;
@@ -151,7 +153,7 @@ export function conformsROI(obj: any): obj is ROI {
   );
 }
 
-class SensorMode {
+export class SensorMode {
   width: number = 0;
   height: number = 0;
   bitDepth: number = 0;
@@ -167,24 +169,24 @@ export function conformsSensorMode(obj: any): obj is SensorMode {
   );
 }
 
-enum FocusMode {
+export enum FocusMode {
   auto = "auto",
   manual = "manual",
   continuous = "continuous",
 }
 
-enum AFRange {
+export enum AFRange {
   normal = "normal",
   macro = "macro",
   full = "full",
 }
 
-enum AFSpeed {
+export enum AFSpeed {
   normal = "normal",
   fast = "fast",
 }
 
-class AFWindow {
+export class AFWindow {
   x: number = 0;
   y: number = 0;
   width: number = 0;
@@ -200,96 +202,192 @@ export function conformsAFWindow(obj: any): obj is AFWindow {
   );
 }
 
-enum Codec {
+export enum Codec {
   auto = "auto",
   hardwareH264 = "hardwareH264",
   softwareH264 = "softwareH264",
 }
 
-// mediamtx.yml settings
-//
-// # ID of the camera
-// rpiCameraCamID: 0
-// # Width of frames
-// rpiCameraWidth: 1920
-// # Height of frames
-// rpiCameraHeight: 1080
-// # Flip horizontally
-// rpiCameraHFlip: false
-// # Flip vertically
-// rpiCameraVFlip: false
-// # Brightness [-1, 1]
-// rpiCameraBrightness: 0
-// # Contrast [0, 16]
-// rpiCameraContrast: 1
-// # Saturation [0, 16]
-// rpiCameraSaturation: 1
-// # Sharpness [0, 16]
-// rpiCameraSharpness: 1
-// # Exposure mode.
-// # values: normal, short, long, custom
-// rpiCameraExposure: normal
-// # Auto-white-balance mode.
-// # values: auto, incandescent, tungsten, fluorescent, indoor, daylight, cloudy, custom
-// rpiCameraAWB: auto
-// # Auto-white-balance fixed gains. This can be used in place of rpiCameraAWB.
-// # format: [red,blue]
-// rpiCameraAWBGains: [0, 0]
-// # Denoise operating mode.
-// # values: off, cdn_off, cdn_fast, cdn_hq
-// rpiCameraDenoise: "off"
-// # Fixed shutter speed, in microseconds.
-// rpiCameraShutter: 0
-// # Metering mode of the AEC/AGC algorithm.
-// # values: centre, spot, matrix, custom
-// rpiCameraMetering: centre
-// # Fixed gain
-// rpiCameraGain: 0
-// # EV compensation of the image [-10, 10]
-// rpiCameraEV: 0
-// # Region of interest, in format x,y,width,height (all normalized between 0 and 1)
-// rpiCameraROI:
-// # Whether to enable HDR on Raspberry Camera 3.
-// rpiCameraHDR: false
-// # Tuning file
-// rpiCameraTuningFile:
-// # Sensor mode, in format [width]:[height]:[bit-depth]:[packing]
-// # bit-depth and packing are optional.
-// rpiCameraMode:
-// # frames per second
-// rpiCameraFPS: 30
-// # Autofocus mode
-// # values: auto, manual, continuous
-// rpiCameraAfMode: continuous
-// # Autofocus range
-// # values: normal, macro, full
-// rpiCameraAfRange: normal
-// # Autofocus speed
-// # values: normal, fast
-// rpiCameraAfSpeed: normal
-// # Lens position (for manual autofocus only), will be set to focus to a specific distance
-// # calculated by the following formula: d = 1 / value
-// # Examples: 0 moves the lens to infinity.
-// #           0.5 moves the lens to focus on objects 2m away.
-// #           2 moves the lens to focus on objects 50cm away.
-// rpiCameraLensPosition: 0.0
-// # Specifies the autofocus window, in the form x,y,width,height where the coordinates
-// # are given as a proportion of the entire image.
-// rpiCameraAfWindow:
-// # Manual flicker correction period, in microseconds.
-// rpiCameraFlickerPeriod: 0
-// # Enables printing text on each frame.
-// rpiCameraTextOverlayEnable: false
-// # Text that is printed on each frame.
-// # format is the one of the strftime() function.
-// rpiCameraTextOverlay: '%Y-%m-%d %H:%M:%S - MediaMTX'
-// # Codec. Available values: auto, hardwareH264, softwareH264
-// rpiCameraCodec: auto
-// # Period between IDR frames
-// rpiCameraIDRPeriod: 60
-// # Bitrate
-// rpiCameraBitrate: 5000000
-// # H264 profile
-// rpiCameraProfile: main
-// # H264 level
-// rpiCameraLevel: '4.1'
+// MARK: MediaMTX YAML Config
+export class MediaMTXConfig {
+  logLevel: string = "info";
+  logDestinations: string[] = ["stdout"];
+  logFile: string = "mediamtx.log";
+  readTimeout: string = "10s";
+  writeTimeout: string = "10s";
+  writeQueueSize: number = 512;
+  udpMaxPayloadSize: number = 1472;
+  runOnConnect: string | null = null;
+  runOnConnectRestart: string = "no";
+  runOnDisconnect: string | null = null;
+  authMethod: string = "internal";
+  authInternalUsers: {
+    user: string;
+    pass: string | null;
+    ips: string[];
+    permissions: object[];
+  }[] = [];
+  authHTTPAddress: string | null = null;
+  authHTTPExclude: { action: string }[] = [];
+  authJWTJWKS: string | null = null;
+  authJWTClaimKey: string = "mediamtx_permissions";
+  api: string = "no";
+  apiAddress: string = ":9997";
+  apiEncryption: string = "no";
+  apiServerKey: string = "server.key";
+  apiServerCert: string = "server.crt";
+  apiAllowOrigin: string = "*";
+  apiTrustedProxies: string[] = [];
+  metrics: string = "no";
+  metricsAddress: string = ":9998";
+  metricsEncryption: string = "no";
+  metricsServerKey: string = "server.key";
+  metricsServerCert: string = "server.crt";
+  metricsAllowOrigin: string = "*";
+  metricsTrustedProxies: string[] = [];
+  pprof: string = "no";
+  pprofAddress: string = ":9999";
+  pprofEncryption: string = "no";
+  pprofServerKey: string = "server.key";
+  pprofServerCert: string = "server.crt";
+  pprofAllowOrigin: string = "*";
+  pprofTrustedProxies: string[] = [];
+  playback: string = "no";
+  playbackAddress: string = ":9996";
+  playbackEncryption: string = "no";
+  playbackServerKey: string = "server.key";
+  playbackServerCert: string = "server.crt";
+  playbackAllowOrigin: string = "*";
+  playbackTrustedProxies: string[] = [];
+  rtsp: boolean = true;
+  rtspTransports: string[] = ["udp", "multicast", "tcp"];
+  rtspEncryption: string = "no";
+  rtspAddress: string = ":8554";
+  rtspsAddress: string = ":8322";
+  rtpAddress: string = ":8000";
+  rtcpAddress: string = ":8001";
+  multicastIPRange: string = "224.1.0.0/16";
+  multicastRTPPort: number = 8002;
+  multicastRTCPPort: number = 8003;
+  rtspServerKey: string = "server.key";
+  rtspServerCert: string = "server.crt";
+  rtspAuthMethods: string[] = ["basic"];
+  rtmp: boolean = true;
+  rtmpAddress: string = ":1935";
+  rtmpEncryption: string = "no";
+  rtmpsAddress: string = ":1936";
+  rtmpServerKey: string = "server.key";
+  rtmpServerCert: string = "server.crt";
+  hls: boolean = true;
+  hlsAddress: string = ":8888";
+  hlsEncryption: string = "no";
+  hlsServerKey: string = "server.key";
+  hlsServerCert: string = "server.crt";
+  hlsAllowOrigin: string = "*";
+  hlsTrustedProxies: string[] = [];
+  hlsAlwaysRemux: string = "no";
+  hlsVariant: string = "lowLatency";
+  hlsSegmentCount: number = 7;
+  hlsSegmentDuration: string = "1s";
+  hlsPartDuration: string = "200ms";
+  hlsSegmentMaxSize: string = "50M";
+  hlsDirectory: string = "";
+  hlsMuxerCloseAfter: string = "60s";
+  webrtc: string = "yes";
+  webrtcAddress: string = ":8889";
+  webrtcEncryption: string = "no";
+  webrtcServerKey: string = "server.key";
+  webrtcServerCert: string = "server.crt";
+  webrtcAllowOrigin: string = "*";
+  webrtcTrustedProxies: string[] = [];
+  webrtcLocalUDPAddress: string = ":8189";
+  webrtcLocalTCPAddress: string = "";
+  webrtcIPsFromInterfaces: string = "yes";
+  webrtcIPsFromInterfacesList: string[] = [];
+  webrtcAdditionalHosts: string[] = [];
+  webrtcICEServers2: string[] = [];
+  webrtcHandshakeTimeout: string = "10s";
+  webrtcTrackGatherTimeout: string = "2s";
+  srt: string = "yes";
+  srtAddress: string = ":8890";
+  pathDefaults: Record<string, any> = {};
+  paths: Record<string, any> = {};
+
+  constructor(init?: Partial<MediaMTXConfig>) {
+    Object.assign(this, init);
+  }
+}
+
+export function conformsMediaMTXConfig(obj: any): boolean {
+  if (typeof obj !== "object" || obj === null) {
+    Log.debugError("Config is not an object or is null");
+    return false;
+  }
+
+  const checks = [
+    { key: "logLevel", type: "string" },
+    { key: "logDestinations", type: "array" },
+    { key: "logFile", type: "string", optional: true },
+    { key: "readTimeout", type: "string" },
+    { key: "writeTimeout", type: "string" },
+    { key: "writeQueueSize", type: "number" },
+    { key: "udpMaxPayloadSize", type: "number" },
+    { key: "authInternalUsers", type: "array" },
+    { key: "api", type: "string" },
+    { key: "apiAddress", type: "string" },
+    { key: "rtsp", type: "boolean" },
+    { key: "rtspTransports", type: "array" },
+    { key: "rtspEncryption", type: "string" },
+    { key: "rtspAddress", type: "string" },
+    { key: "rtspsAddress", type: "string", optional: true },
+    { key: "hls", type: "boolean" },
+    { key: "hlsAddress", type: "string" },
+    { key: "hlsEncryption", type: "string" },
+    { key: "hlsSegmentCount", type: "number" },
+    { key: "hlsSegmentDuration", type: "string" },
+    { key: "webrtc", type: "string" },
+    { key: "webrtcAddress", type: "string" },
+    { key: "srt", type: "string" },
+    { key: "srtAddress", type: "string" },
+    { key: "pathDefaults", type: "object" },
+    { key: "paths", type: "object" },
+  ];
+
+  for (const { key, type, optional } of checks) {
+    if (!(key in obj)) {
+      if (!optional) {
+        Log.debugError(`Missing required key: ${key}`);
+        return false;
+      }
+      continue;
+    }
+    const value = obj[key];
+
+    if (value === null) continue; // Allow null for optional values
+
+    if (type === "array" && !Array.isArray(value)) {
+      Log.debugError(`Key ${key} is not an array`);
+      return false;
+    }
+    if (
+      type === "object" &&
+      (typeof value !== "object" || Array.isArray(value))
+    ) {
+      Log.debugError(`Key ${key} is not an object`);
+      return false;
+    }
+    if (type === "string" && typeof value !== "string") {
+      Log.debugError(`Key ${key} is not a string`);
+      return false;
+    }
+    if (type === "number" && typeof value !== "number") {
+      Log.debugError(`Key ${key} is not a number`);
+      return false;
+    }
+    if (type === "boolean" && typeof value !== "boolean") {
+      Log.debugError(`Key ${key} is not a boolean`);
+      return false;
+    }
+  }
+  return true;
+}

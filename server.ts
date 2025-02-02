@@ -43,8 +43,8 @@ async function getHandler(req: Request, path: string): Promise<Response> {
       return await statics.mediamtxYml();
     case "/camera/settings/get":
       return await camSettings.get(req);
-      case "/camera/settings/current":
-        return await camSettings.current();
+    case "/camera/settings/current":
+      return await camSettings.current();
     default:
       return new Response("404 Not Found", { status: 404 });
   }

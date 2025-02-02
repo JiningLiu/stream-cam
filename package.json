@@ -3,7 +3,8 @@
   "module": "server.ts",
   "type": "module",
   "scripts": {
-    "start": "echo 'Starting stream-cam servers...' && bun server.ts & bun uiServer.ts &",
+    "start": "echo 'PRODUCTION | Starting stream-cam servers...' && ENVIRONMENT=PRODUCTION bun server.ts & ENVIRONMENT=PRODUCTION bun uiServer.ts &",
+    "dev": "echo 'DEVELOPMENT | Starting stream-cam servers...' && ENVIRONMENT=DEVELOPMENT bun server.ts & ENVIRONMENT=DEVELOPMENT bun uiServer.ts &",
     "stop": "echo 'Stopping stream-cam servers...' && lsof -i tcp:80 | awk 'NR!=1 {print $2}' | xargs kill && lsof -i tcp:20240 | awk 'NR!=1 {print $2}' | xargs kill"
   },
   "devDependencies": {
