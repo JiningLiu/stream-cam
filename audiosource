@@ -1,0 +1,193 @@
+#!/usr/bin/env bash
+
+set -eu
+
+AUDIOSOURCE_PROFILE=${AUDIOSOURCE_PROFILE:-debug}
+AUDIOSOURCE_DEFAULT_APK=app/build/outputs/apk/debug/app-debug.apk
+
+if [ "$AUDIOSOURCE_PROFILE" = 'release' ]; then
+	AUDIOSOURCE_DEFAULT_APK=app/build/outputs/apk/release/app-release.apk
+fi
+
+AUDIOSOURCE_APK=${AUDIOSOURCE_APK:-"$AUDIOSOURCE_DEFAULT_APK"}
+AUDIOSOURCE_NAME=${AUDIOSOURCE_NAME:-android}
+AUDIOSOURCE_PIPE=${AUDIOSOURCE_PIPE:-/tmp/audiosource}
+AUDIOSOURCE_SOCKET=${AUDIOSOURCE_SOCKET:-audiosource}
+
+PYSOCAT="$(cat <<EOF
+import fcntl
+import os
+import socket
+import sys
+
+if not hasattr(fcntl, 'F_SETPIPE_SZ'):
+    fcntl.F_SETPIPE_SZ = 1031
+
+PIPE_SIZE = 4096
+BUF_SIZE = 1024 # Must be less than PIPE_BUF = 4096 for atomic writes.
+
+def socat(inp, out):
+    buf = bytearray(BUF_SIZE)
+
+    fcntl.fcntl(out, fcntl.F_SETPIPE_SZ, PIPE_SIZE)
+
+    flags = fcntl.fcntl(out, fcntl.F_GETFL)
+    fcntl.fcntl(out, fcntl.F_SETFL, flags | os.O_NONBLOCK)
+
+    while True:
+        n = inp.recv_into(buf, BUF_SIZE, socket.MSG_WAITALL)
+
+        if n == 0:
+            break
+
+        try:
+            out.write(buf)
+        except BlockingIOError:
+            pass
+
+def main(sock_name, pipe_name):
+    sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    sock.connect('\0' + sock_name)
+
+    with open(pipe_name, 'wb') as fifo:
+        socat(sock, fifo)
+
+if __name__ == '__main__':
+    main(sys.argv[1], sys.argv[2])
+EOF
+)"
+
+build() {
+	if [ "$AUDIOSOURCE_PROFILE" = 'release' ]; then
+		./gradlew assembleRelease
+	else
+		./gradlew assembleDebug
+	fi
+}
+
+install() {
+	if ! command -v adb &> /dev/null; then
+		echo "error: adb not found"
+		exit 1
+	fi
+
+	if ! [ -f "$AUDIOSOURCE_APK" ]; then
+		echo "error: apk '$AUDIOSOURCE_APK' not found"
+		exit 1
+	fi
+
+	opts=
+	if [ $# -ge 1 ]; then
+		opts="-s $1"
+	fi
+
+	echo '[+] Waiting for device'
+
+	adb $opts wait-for-device
+
+	echo '[+] Installing Audio Source'
+
+	adb $opts install -t -r -g "$AUDIOSOURCE_APK" || {
+		adb $opts uninstall fr.dzx.audiosource
+		adb $opts install -t -g "$AUDIOSOURCE_APK"
+	}
+}
+
+_release() {
+	AUDIOSOURCE_PROFILE=release
+	AUDIOSOURCE_APK=app/build/outputs/apk/release/app-release.apk
+
+	build
+
+	cp -a "$AUDIOSOURCE_APK" audiosource.apk
+	sha256sum audiosource.apk > audiosource.apk.sha256
+}
+
+_unload() {
+	for id in `pactl list modules short | sed -n "/module-pipe-source\tsource_name=$AUDIOSOURCE_NAME/p" | cut -f1`; do
+		pactl unload-module "$id"
+	done
+}
+
+run() {
+	for cmd in adb pactl python3; do
+		if ! command -v $cmd &> /dev/null; then
+			echo "error: $cmd not found"
+			exit 1
+		fi
+	done
+
+	trap 'rc=$?; _unload; exit $rc' EXIT
+	trap 'exit 130' INT
+
+	_unload
+
+	echo '[+] Loading PulseAudio module'
+
+	pactl load-module module-pipe-source source_name="$AUDIOSOURCE_NAME" channels=1 format=s16 rate=44100 file="$AUDIOSOURCE_PIPE"
+
+	opts=
+	if [ $# -ge 1 ]; then
+		opts="-s $1"
+	fi
+
+	echo '[+] Waiting for device'
+
+	adb $opts wait-for-device
+
+	echo '[+] Starting Audio Source'
+
+	adb $opts shell am start fr.dzx.audiosource/.MainActivity
+
+	echo '[+] Forwarding audio'
+
+	adb $opts forward localabstract:"$AUDIOSOURCE_SOCKET" localabstract:audiosource
+	sleep 1
+	python3 -c "$PYSOCAT" "$AUDIOSOURCE_SOCKET" "$AUDIOSOURCE_PIPE"
+}
+
+volume() {
+	pactl set-source-volume android "$1"
+}
+
+main_help() {
+	cat <<-EOF
+		Usage: ./audiosource [-s SERIAL] COMMAND [ARGS...]
+
+		Commands:
+
+		   build       Build Audio Source APK (default: debug)
+		   install     Install Audio Source to Android device (default: debug)
+		   run         Run Audio Source and start forwarding
+		   volume VOL  Set volume to VOL (for example, 250%)
+
+		Environment:
+
+		   AUDIOSOURCE_APK      APK path (default: app/build/outputs/apk/\$profile/app-\$profile.apk)
+		   AUDIOSOURCE_NAME     PulseAudio source name (default: android)
+		   AUDIOSOURCE_PIPE     PulseAudio source pipe (default: /tmp/android.input)
+		   AUDIOSOURCE_PROFILE  Build profile (debug or release, default: build)
+		   AUDIOSOURCE_SOCKET   Local abstract socket name (default: audiosource)
+	EOF
+}
+
+main() {
+	if [ $# -eq 0 ]; then
+		main_help
+		return 2
+	fi
+
+	cmd="$1"
+	shift
+
+	case "$cmd" in
+		build|install|run|volume|_release)
+			"$cmd" "$@"
+			;;
+		*)
+			main_help
+			return 2
+	esac
+}
+
+main "$@"

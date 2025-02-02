@@ -1,0 +1,12 @@
+#!/bin/bash
+# ****************************************************************
+# stream-cam
+# Live stream camera system based on the Raspberry Pi 5 and Camera Module 3.
+#
+# Update script
+#
+# Open source information to come.
+# © 2024-2025 Jining Liu, FTC Team 20240 Slingshot, and contributors. All rights reserved.
+#
+# A free & (planned) open source project created by Jining Liu.
+# ****************************************************************
