@@ -12,6 +12,8 @@
 
 import { $, env } from "bun";
 
+import { respond } from "./supplements/handlers/UI";
+
 const port = env.PORT || 80;
 
 try {
@@ -30,13 +32,13 @@ try {
   const server = Bun.serve({
     port: port,
     async fetch(req) {
-      const serverRes = await fetch("http://localhost:20240").then((res) =>
-        res.text()
-      );
-
-      return new Response(
-        `stream-cam development: ui\n\n****************************************************************\n\nserver response:\n\n${serverRes}`
-      );
+      const url = new URL(req.url);
+      let path = url.pathname;
+      if (path === "/") path = "/index.html";
+      if (!path.includes(".")) {
+        path = `${path}.html`;
+      }
+      return respond(path);
     },
   });
 }
