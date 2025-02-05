@@ -1,49 +1,126 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" href="./favicon.png" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="stylesheet" href="./font/inter.css" />
-		<link rel="stylesheet" href="./global.css" /> 
-		
-		<link href="./_app/immutable/assets/2.CHX1fvB-.css" rel="stylesheet">
-		<link rel="modulepreload" href="./_app/immutable/entry/start.BJDHJGbw.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/Bp5D32pm.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/BCCX_h2B.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/D5tkPi6A.js">
-		<link rel="modulepreload" href="./_app/immutable/entry/app.59NfFa4A.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/DXRwknvP.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/BFlb7dTx.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/A2cA5snX.js">
-		<link rel="modulepreload" href="./_app/immutable/nodes/0.CuvPlNLx.js">
-		<link rel="modulepreload" href="./_app/immutable/nodes/2.BpzTc8_h.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/Cf2EYafe.js">
-	</head>
-	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents"><!--[--><!--[--><!----><!----><main class="svelte-ivqt3l"><div id="menu-parent" class="svelte-ivqt3l"><input id="menu-btn" type="checkbox" name="menu" class="svelte-ivqt3l"> <label for="menu-btn" class="nav-btn svelte-ivqt3l"><span class="material-symbols-rounded">menu</span></label> <div id="menu" class="svelte-ivqt3l"><p>A dropdown menu</p></div></div> <div id="topbar" class="svelte-ivqt3l"><button id="home" class="nav-btn svelte-ivqt3l selected"><span class="material-symbols-rounded">home</span></button> <button id="extensions" class="nav-btn svelte-ivqt3l "><span class="material-symbols-rounded">extension</span></button> <button id="settings" class="nav-btn svelte-ivqt3l "><span class="material-symbols-rounded">settings</span></button></div> <div id="sidebar" class="svelte-ivqt3l"><!--[--><!--[--><button id="camera" class="nav-btn svelte-ivqt3l selected"><span class="material-symbols-rounded">videocam</span></button><button id="terminal" class="nav-btn svelte-ivqt3l "><span class="material-symbols-rounded">terminal</span></button><button id="configs" class="nav-btn svelte-ivqt3l "><span class="material-symbols-rounded">tune</span></button><!--]--><!--]--></div> <div id="content" class="svelte-ivqt3l"><h1>Page</h1> <p>Page content123</p></div></main> <div id="too-small" class="svelte-ivqt3l"><h1>2smol!</h1> <p>Make the window bigger</p></div><!----><!----><!----><!--]--> <!--[!--><!--]--><!--]-->
-			
-			<script>
-				{
-					__sveltekit_18d80l8 = {
-						base: new URL(".", location).pathname.slice(0, -1)
-					};
 
-					const element = document.currentScript.parentElement;
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" href="./favicon.png" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="./font/inter.css" />
+	<link rel="stylesheet" href="./global.css" />
 
-					Promise.all([
-						import("./_app/immutable/entry/start.BJDHJGbw.js"),
-						import("./_app/immutable/entry/app.59NfFa4A.js")
-					]).then(([kit, app]) => {
-						kit.start(app, element, {
-							node_ids: [0, 2],
-							data: [null,null],
-							form: null,
-							error: null
-						});
-					});
-				}
-			</script>
+	<link href="./_app/immutable/assets/2.CHX1fvB-.css" rel="stylesheet">
+	<link rel="modulepreload" href="./_app/immutable/entry/start.BJDHJGbw.js">
+	<link rel="modulepreload" href="./_app/immutable/chunks/Bp5D32pm.js">
+	<link rel="modulepreload" href="./_app/immutable/chunks/BCCX_h2B.js">
+	<link rel="modulepreload" href="./_app/immutable/chunks/D5tkPi6A.js">
+	<link rel="modulepreload" href="./_app/immutable/entry/app.59NfFa4A.js">
+	<link rel="modulepreload" href="./_app/immutable/chunks/DXRwknvP.js">
+	<link rel="modulepreload" href="./_app/immutable/chunks/BFlb7dTx.js">
+	<link rel="modulepreload" href="./_app/immutable/chunks/A2cA5snX.js">
+	<link rel="modulepreload" href="./_app/immutable/nodes/0.CuvPlNLx.js">
+	<link rel="modulepreload" href="./_app/immutable/nodes/2.BpzTc8_h.js">
+	<link rel="modulepreload" href="./_app/immutable/chunks/Cf2EYafe.js">
+</head>
+
+<body data-sveltekit-preload-data="hover">
+	<div style="display: contents">
+
+		<!--[--><!--[--><!----><!---->
+		<!-- normal stuff -->
+		<main class="svelte-ivqt3l">
+
+			<!-- menu -->
+			<div id="menu-parent" class="svelte-ivqt3l">
+
+				<!-- Can't find this -->
+				<input id="menu-btn" type="checkbox" name="menu" class="svelte-ivqt3l">
+
+				<!-- I think this is the dropdown trigger -->
+				<label for="menu-btn" class="nav-btn svelte-ivqt3l">
+					<span class="material-symbols-rounded">menu</span>
+				</label>
+
+				<!-- dropdown -->
+				<div id="menu" class="svelte-ivqt3l">
+					<p>A dropdown menu</p>
+				</div>
+			</div>
+
+			<!-- top bar -->
+			<div id="topbar" class="svelte-ivqt3l">
+
+				<!-- home symbol -->
+				<button id="home" class="nav-btn svelte-ivqt3l selected">
+					<span class="material-symbols-rounded">home</span>
+				</button>
+
+				<!-- puzzle piece symbol -->
+				<button id="extensions" class="nav-btn svelte-ivqt3l ">
+					<span class="material-symbols-rounded">extension</span>
+				</button>
+
+				<!-- gear symbol -->
+				<button id="settings" class="nav-btn svelte-ivqt3l ">
+					<span class="material-symbols-rounded">settings</span>
+				</button>
+			</div>
+
+			<!-- sidebar -->
+			<div id="sidebar" class="svelte-ivqt3l">
+				<!--[--><!--[-->
+
+				<!-- camera symbol -->
+				<button id="camera" class="nav-btn svelte-ivqt3l selected">
+					<span class="material-symbols-rounded">videocam</span>
+				</button>
+
+				<!-- terminal symbol -->
+				<button id="terminal" class="nav-btn svelte-ivqt3l ">
+					<span class="material-symbols-rounded">terminal</span>
+				</button>
+
+				<!-- mixer symbol -->
+				<button id="configs" class="nav-btn svelte-ivqt3l ">
+					<span class="material-symbols-rounded">tune</span>
+				</button>
+				<!--]--><!--]-->
+			</div>
+
+			<!-- main page -->
+			<div id="content" class="svelte-ivqt3l">
+				<h1>Page</h1>
+				<p>Page content123</p>
+			</div>
+		</main>
+		<!-- too small -->
+		<div id="too-small" class="svelte-ivqt3l">
+			<h1>2smol!</h1>
+			<p>Make the window bigger</p>
 		</div>
-	</body>
+		<!----><!----><!----><!--]--> <!--[!--><!--]--><!--]-->
+
+		<script>
+			{
+				__sveltekit_18d80l8 = {
+					base: new URL(".", location).pathname.slice(0, -1)
+				};
+
+				const element = document.currentScript.parentElement;
+
+				Promise.all([
+					import("./_app/immutable/entry/start.BJDHJGbw.js"),
+					import("./_app/immutable/entry/app.59NfFa4A.js")
+				]).then(([kit, app]) => {
+					kit.start(app, element, {
+						node_ids: [0, 2],
+						data: [null, null],
+						form: null,
+						error: null
+					});
+				});
+			}
+		</script>
+	</div>
+</body>
+
 </html>
