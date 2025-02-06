@@ -3,7 +3,7 @@
 // CameraSettings
 // ****************************************************************
 
-import { file, write } from "bun";
+import { $, file, sleep, write } from "bun";
 import YAML from "yaml";
 
 import {
@@ -21,14 +21,51 @@ const dflt = YAML.parse(
 const existing = await file("./mediamtx/config/settings.json").json();
 const currentId = await file("./mediamtx/config/current.txt").text();
 
-export abstract class CameraSettings {
+export abstract class Camera {
   private static _settings: Settings[] = existing;
   private static _current?: string =
     currentId.length > 0 ? currentId : undefined;
 
   // MARK: External
 
-  static async get(req: Request): Promise<Response> {
+  static async status(): Promise<Response> {
+    let mediamtxLength = 0;
+    let audiosourceLength = 0;
+
+    try {
+      const mediamtx = await $`pgrep -f "mediamtx"`;
+      mediamtxLength = mediamtx.stdout.toString().trim().length;
+      const audiosource = await $`pgrep -f "audiosource"`;
+      audiosourceLength = audiosource.stdout.toString().trim().length;
+    } catch {}
+
+    const status = {
+      mediamtx: mediamtxLength > 0,
+      audiosource: audiosourceLength > 0,
+    };
+
+    return new Response(JSON.stringify(status), { status: 200 });
+  }
+
+  static async turnOn(): Promise<Response> {
+    (async () => {
+      try {
+        await $`cam on`;
+      } catch {}
+    })();
+    await sleep(0.5);
+    return await this.status();
+  }
+
+  static async turnOff(): Promise<Response> {
+    try {
+      await $`cam off`;
+    } catch {}
+    await sleep(0.5);
+    return await this.status();
+  }
+
+  static async getConfigs(req: Request): Promise<Response> {
     const data = await new URLSearchParams(req.url.split("?")[1]).get("id");
 
     const settings = this._settings.find((settings) => settings.id === data);
@@ -40,7 +77,7 @@ export abstract class CameraSettings {
     return new Response("404 Not Found", { status: 404 });
   }
 
-  static async current(): Promise<Response> {
+  static async currentConfigs(): Promise<Response> {
     const settings = this.currentSettings;
 
     if (settings) {
@@ -50,7 +87,7 @@ export abstract class CameraSettings {
     return new Response("404 Not Found", { status: 404 });
   }
 
-  static async add(req: Request): Promise<Response> {
+  static async addConfigs(req: Request): Promise<Response> {
     const data = await req.json();
 
     if (conformsCameraSettings(data)) {
@@ -62,10 +99,32 @@ export abstract class CameraSettings {
     return new Response("400 Bad Request", { status: 400 });
   }
 
-  static async set(req: Request): Promise<Response> {
+  static async setConfigs(req: Request): Promise<Response> {
     const data = await req.text();
 
     if (await this.setSettings(data)) {
+      return new Response("200 OK", { status: 200 });
+    }
+
+    return new Response("400 Bad Request", { status: 400 });
+  }
+
+  static async updateConfigs(req: Request): Promise<Response> {
+    const data = await req.json();
+
+    if (conformsCameraSettings(data)) {
+      if (await this.updateSettings(data)) {
+        return new Response("200 OK", { status: 200 });
+      }
+    }
+
+    return new Response("400 Bad Request", { status: 400 });
+  }
+
+  static async deleteConfigs(req: Request): Promise<Response> {
+    const data = await req.text();
+
+    if (await this.removeSettings(data)) {
       return new Response("200 OK", { status: 200 });
     }
 
@@ -92,11 +151,10 @@ export abstract class CameraSettings {
     return await this.saveSettings();
   }
 
-  private static async updateSettings(
-    id: string,
-    newSettings: Settings
-  ): Promise<boolean> {
-    const index = this._settings.findIndex((settings) => settings.id === id);
+  private static async updateSettings(newSettings: Settings): Promise<boolean> {
+    const index = this._settings.findIndex(
+      (settings) => settings.id === newSettings.id
+    );
 
     if (index !== -1) {
       this._settings[index] = newSettings;

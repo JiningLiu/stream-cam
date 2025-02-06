@@ -37,6 +37,44 @@ bun prep
 
 > ❗ This script installs the latest version in the **development** branch. Please only use for testing purposes.
 
+## Scripts
+
+The following `bun` scripts simplifies the start/stop process for the servers.
+
+### Production
+
+```bash
+bun start # start inactive/idle server(s)
+bun start:force # kill existing instances & start servers
+bun start:backend # start backend server (asks if existing should be killed)
+bun start:ui # start UI server (asks if existing should be killed)
+```
+
+### Development
+
+```bash
+bun dev
+bun dev:force
+bun dev:backend
+bun dev:ui
+```
+
+### Stopping (RPi)
+
+```bash
+bun stop # kill both servers
+bun stop:backend # kills backend server
+bun stop:ui # kills UI server
+```
+
+### Stopping (macOS)
+
+```bash
+bun stop-mac
+bun stop-mac:backend
+bun stop-mac:ui
+```
+
 ```bash
 curl https://raw.githubusercontent.com/JiningLiu/stream-cam/refs/heads/dev/install.sh | bash
 ```

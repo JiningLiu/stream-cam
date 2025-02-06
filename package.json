@@ -3,9 +3,25 @@
   "module": "server.ts",
   "type": "module",
   "scripts": {
-    "start": "echo 'PRODUCTION | Starting stream-cam servers...' && ENVIRONMENT=PRODUCTION bun server.ts & ENVIRONMENT=PRODUCTION bun uiServer.ts &",
-    "dev": "echo 'DEVELOPMENT | Starting stream-cam servers...' && ENVIRONMENT=DEVELOPMENT bun server.ts & ENVIRONMENT=DEVELOPMENT bun uiServer.ts &",
+
+    "start": "echo 'PRODUCTION | Starting stream-cam idle servers...' && ENVIRONMENT=PRODUCTION FORCE=FALSE bun server.ts & ENVIRONMENT=PRODUCTION FORCE=FALSE bun uiServer.ts &",
+    "start:force": "echo 'PRODUCTION | Starting stream-cam servers (forced)...' && ENVIRONMENT=PRODUCTION FORCE=TRUE bun server.ts & ENVIRONMENT=PRODUCTION FORCE=TRUE bun uiServer.ts &",
+    "start:backend": "echo 'PRODUCTION | Starting stream-cam backend server...' && ENVIRONMENT=PRODUCTION bun server.ts",
+    "start:ui": "echo 'PRODUCTION | Starting stream-cam UI server...' && ENVIRONMENT=PRODUCTION bun uiServer.ts",
+
+    "dev": "echo 'DEVELOPMENT | Starting stream-cam idle servers...' && ENVIRONMENT=DEVELOPMENT FORCE=FALSE bun server.ts & ENVIRONMENT=DEVELOPMENT FORCE=FALSE bun uiServer.ts &",
+    "dev:force": "echo 'DEVELOPMENT | Starting stream-cam servers (forced)...' && ENVIRONMENT=DEVELOPMENT FORCE=TRUE bun server.ts & ENVIRONMENT=DEVELOPMENT FORCE=TRUE bun uiServer.ts &",
+    "dev:backend": "echo 'DEVELOPMENT | Starting stream-cam backend server...' && ENVIRONMENT=DEVELOPMENT bun server.ts",
+    "dev:ui": "echo 'DEVELOPMENT | Starting stream-cam UI server...' && ENVIRONMENT=DEVELOPMENT bun uiServer.ts",
+
     "stop": "echo 'Stopping stream-cam servers...' && sudo fuser -k 20240/tcp & sudo fuser -k 80/tcp",
+    "stop:backend": "echo 'Stopping stream-cam backend server...' && sudo fuser -k 20240/tcp",
+    "stop:ui": "echo 'Stopping stream-cam UI server...' && sudo fuser -k 80/tcp",
+
+    "stop-mac": "echo 'Stopping stream-cam servers...' && lsof -i tcp:20240 | awk 'NR!=1 {print $2}' | xargs -r kill & lsof -i tcp:80 | awk 'NR!=1 {print $2}' | xargs -r kill",
+    "stop-mac:backend": "echo 'Stopping stream-cam backend server...' && lsof -i tcp:20240 | awk 'NR!=1 {print $2}' | xargs -r kill",
+    "stop-mac:ui": "echo 'Stopping stream-cam UI server...' && lsof -i tcp:80 | awk 'NR!=1 {print $2}' | xargs -r kill",
+
     "prep": "echo 'Preparing stream-cam for push...' && echo '[]' > ./mediamtx/config/settings.json && echo '' > ./mediamtx/config/current.txt"
   },
   "devDependencies": {
