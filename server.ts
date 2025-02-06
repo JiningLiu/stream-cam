@@ -12,7 +12,6 @@
 
 import { $, env, serve, sleep } from "bun";
 
-import { System } from "./supplements/handlers/System";
 import { Camera } from "./supplements/handlers/Camera";
 import { Statics } from "./supplements/handlers/Statics";
 

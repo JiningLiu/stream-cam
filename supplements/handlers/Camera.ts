@@ -44,7 +44,10 @@ export abstract class Camera {
       audiosource: audiosourceLength > 0,
     };
 
-    return new Response(JSON.stringify(status), { status: 200 });
+    return new Response(JSON.stringify(status), {
+      status: 200,
+      headers: { "Access-Control-Allow-Origin": "*" },
+    });
   }
 
   static async turnOn(): Promise<Response> {
@@ -71,7 +74,10 @@ export abstract class Camera {
     const settings = this._settings.find((settings) => settings.id === data);
 
     if (settings) {
-      return new Response(JSON.stringify(settings), { status: 200 });
+      return new Response(JSON.stringify(settings), {
+        status: 200,
+        headers: { "Access-Control-Allow-Origin": "*" },
+      });
     }
 
     return new Response("404 Not Found", { status: 404 });
@@ -81,7 +87,10 @@ export abstract class Camera {
     const settings = this.currentSettings;
 
     if (settings) {
-      return new Response(JSON.stringify(settings), { status: 200 });
+      return new Response(JSON.stringify(settings), {
+        status: 200,
+        headers: { "Access-Control-Allow-Origin": "*" },
+      });
     }
 
     return new Response("404 Not Found", { status: 404 });
@@ -92,7 +101,10 @@ export abstract class Camera {
 
     if (conformsCameraSettings(data)) {
       if (await this.addSettings(data)) {
-        return new Response("200 OK", { status: 200 });
+        return new Response("200 OK", {
+          status: 200,
+          headers: { "Access-Control-Allow-Origin": "*" },
+        });
       }
     }
 
@@ -103,7 +115,10 @@ export abstract class Camera {
     const data = await req.text();
 
     if (await this.setSettings(data)) {
-      return new Response("200 OK", { status: 200 });
+      return new Response("200 OK", {
+        status: 200,
+        headers: { "Access-Control-Allow-Origin": "*" },
+      });
     }
 
     return new Response("400 Bad Request", { status: 400 });
@@ -114,7 +129,10 @@ export abstract class Camera {
 
     if (conformsCameraSettings(data)) {
       if (await this.updateSettings(data)) {
-        return new Response("200 OK", { status: 200 });
+        return new Response("200 OK", {
+          status: 200,
+          headers: { "Access-Control-Allow-Origin": "*" },
+        });
       }
     }
 
@@ -125,7 +143,10 @@ export abstract class Camera {
     const data = await req.text();
 
     if (await this.removeSettings(data)) {
-      return new Response("200 OK", { status: 200 });
+      return new Response("200 OK", {
+        status: 200,
+        headers: { "Access-Control-Allow-Origin": "*" },
+      });
     }
 
     return new Response("400 Bad Request", { status: 400 });
