@@ -19,7 +19,7 @@ const force =
   env.FORCE == "TRUE" ? true : env.FORCE == "FALSE" ? false : undefined;
 
 try {
-  const result = await $`lsof -i :${port}`;
+  const result = await $`sudo lsof -ti :${port}`;
   if (result.stdout.toString().trim().length > 0) {
     let kill = false;
     kill = force == true;
@@ -31,8 +31,8 @@ try {
     }
 
     if (kill) {
-      // await $`sudo fuser -k ${port}/tcp`;
-      await $`lsof -i tcp:${port} | awk 'NR!=1 {print $2}' | xargs -r kill`;
+      await $`sudo fuser -k ${port}/tcp`;
+      // await $`lsof -i tcp:${port} | awk 'NR!=1 {print $2}' | xargs -r kill`;
       await sleep(1);
     } else {
       process.exit(1);
