@@ -37,6 +37,10 @@ bun prep
 
 > ❗ This script installs the latest version in the **development** branch. Please only use for testing purposes.
 
+```bash
+curl https://raw.githubusercontent.com/JiningLiu/stream-cam/refs/heads/dev/install.sh | bash
+```
+
 ## Scripts
 
 The following `bun` scripts simplifies the start/stop process for the servers.
@@ -73,10 +77,6 @@ bun stop:ui # kills UI server
 bun stop-mac
 bun stop-mac:backend
 bun stop-mac:ui
-```
-
-```bash
-curl https://raw.githubusercontent.com/JiningLiu/stream-cam/refs/heads/dev/install.sh | bash
 ```
 
 ## Licenses

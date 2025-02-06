@@ -175,4 +175,5 @@ dist
 .DS_Store
 
 # stream-cam
-/mediamtx.yml
+mediamtx.yml
+mediamtx/

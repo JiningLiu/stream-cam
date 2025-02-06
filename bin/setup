@@ -13,6 +13,8 @@
 
 cd ~/stream-cam
 
+cp -r mediamtx_defaults mediamtx
+
 chmod -R a+x bin/*
 
 bun i
