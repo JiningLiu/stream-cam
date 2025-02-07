@@ -4,8 +4,8 @@
 	--secondary-color: #888;
 	--bg-color-1: #fff;
 	--bg-color-2: #f5f5f5;
-	--bg-color-3: #f1f1f1;
-	--bg-color-4: #eeeeee;
+	--bg-color-3: #eaeaea;
+	--bg-color-4: #e4e4e4;
 
 	@media (prefers-color-scheme: dark) {
 		color: white;
@@ -49,6 +49,7 @@
 }
 
 * {
+	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
 }

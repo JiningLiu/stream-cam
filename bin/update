@@ -10,3 +10,10 @@
 #
 # A free & (planned) open source project created by Jining Liu.
 # ****************************************************************
+
+cd ~/stream-cam
+
+git pull
+
+bun i
+chmod -R a+x bin/*
