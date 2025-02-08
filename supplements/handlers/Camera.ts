@@ -11,6 +11,7 @@ import {
   conformsCameraSettings,
   MediaMTXConfig,
   conformsMediaMTXConfig,
+  CameraSettings,
 } from "../data/CameraSettings";
 import { Log } from "../debug/Log";
 

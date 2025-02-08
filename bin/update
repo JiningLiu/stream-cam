@@ -13,6 +13,7 @@
 
 cd ~/stream-cam
 
+git stash save --keep-index --include-untracked
 git pull
 
 bun i

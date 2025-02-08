@@ -14,6 +14,7 @@
 cd ~/stream-cam
 
 cp -r mediamtx_defaults mediamtx
+cp mediamtx_defaults/config/default.yml mediamtx.yml
 
 chmod -R a+x bin/*
 
