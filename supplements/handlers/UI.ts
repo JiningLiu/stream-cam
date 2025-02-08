@@ -10,9 +10,18 @@ export async function respond(path: string): Promise<Response> {
   if (await file.exists()) {
     return new Response(file, {
       status: 200,
-      headers: { "Access-Control-Allow-Origin": "*" },
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET",
+      },
     });
   }
 
-  return new Response("404 Not Found", { status: 404 });
+  return new Response("404 Not Found", {
+    status: 404,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+    },
+  });
 }

@@ -45,6 +45,17 @@ try {
     port: port,
 
     async fetch(req) {
+      if (req.method === "OPTIONS") {
+        return new Response(null, {
+          status: 204,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
+          },
+        });
+      }
+
       const url = new URL(req.url);
 
       // Static files & assets
@@ -68,6 +79,8 @@ try {
     switch (path) {
       case "/camera/status":
         return await Camera.status();
+      case "/camera/settings/all":
+        return await Camera.getAllConfigs();
       case "/camera/settings/get":
         return await Camera.getConfigs(req);
       case "/camera/settings/current":
@@ -75,7 +88,13 @@ try {
       case "/mediamtx.yml":
         return await Statics.mediamtxYml();
       default:
-        return new Response("404 Not Found", { status: 404 });
+        return new Response("404 Not Found", {
+          status: 404,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          },
+        });
     }
   }
 
@@ -91,7 +110,13 @@ try {
       case "/camera/settings/set":
         return await Camera.setConfigs(req);
       default:
-        return new Response("404 Not Found", { status: 404 });
+        return new Response("404 Not Found", {
+          status: 404,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          },
+        });
     }
   }
 
@@ -101,7 +126,13 @@ try {
       case "/camera/settings/update":
         return await Camera.updateConfigs(req);
       default:
-        return new Response("404 Not Found", { status: 404 });
+        return new Response("404 Not Found", {
+          status: 404,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          },
+        });
     }
   }
 
@@ -111,7 +142,13 @@ try {
       case "/camera/settings/delete":
         return await Camera.deleteConfigs(req);
       default:
-        return new Response("404 Not Found", { status: 404 });
+        return new Response("404 Not Found", {
+          status: 404,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          },
+        });
     }
   }
 }

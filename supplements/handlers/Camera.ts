@@ -22,6 +22,9 @@ const existing = await file("./mediamtx/config/settings.json").json();
 const currentId = await file("./mediamtx/config/current.txt").text();
 
 export abstract class Camera {
+  private static _camOn: boolean = false;
+  private static _micOn: boolean = false;
+
   private static _settings: Settings[] = existing;
   private static _current?: string =
     currentId.length > 0 ? currentId : undefined;
@@ -39,14 +42,20 @@ export abstract class Camera {
       audiosourceLength = audiosource.stdout.toString().trim().length;
     } catch {}
 
+    this._camOn = mediamtxLength > 0;
+    this._micOn = audiosourceLength > 0;
+
     const status = {
-      mediamtx: mediamtxLength > 0,
-      audiosource: audiosourceLength > 0,
+      mediamtx: this._camOn,
+      audiosource: this._micOn,
     };
 
     return new Response(JSON.stringify(status), {
       status: 200,
-      headers: { "Access-Control-Allow-Origin": "*" },
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET",
+      },
     });
   }
 
@@ -56,7 +65,7 @@ export abstract class Camera {
         await $`cam on`;
       } catch {}
     })();
-    await sleep(0.5);
+    await sleep(0.8);
     return await this.status();
   }
 
@@ -64,8 +73,18 @@ export abstract class Camera {
     try {
       await $`cam off`;
     } catch {}
-    await sleep(0.5);
+    await sleep(0.8);
     return await this.status();
+  }
+
+  static async getAllConfigs(): Promise<Response> {
+    return new Response(JSON.stringify(this._settings), {
+      status: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET",
+      },
+    });
   }
 
   static async getConfigs(req: Request): Promise<Response> {
@@ -76,11 +95,20 @@ export abstract class Camera {
     if (settings) {
       return new Response(JSON.stringify(settings), {
         status: 200,
-        headers: { "Access-Control-Allow-Origin": "*" },
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET",
+        },
       });
     }
 
-    return new Response("404 Not Found", { status: 404 });
+    return new Response("404 Not Found", {
+      status: 404,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      },
+    });
   }
 
   static async currentConfigs(): Promise<Response> {
@@ -89,11 +117,20 @@ export abstract class Camera {
     if (settings) {
       return new Response(JSON.stringify(settings), {
         status: 200,
-        headers: { "Access-Control-Allow-Origin": "*" },
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET",
+        },
       });
     }
 
-    return new Response("404 Not Found", { status: 404 });
+    return new Response("404 Not Found", {
+      status: 404,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      },
+    });
   }
 
   static async addConfigs(req: Request): Promise<Response> {
@@ -103,12 +140,21 @@ export abstract class Camera {
       if (await this.addSettings(data)) {
         return new Response("200 OK", {
           status: 200,
-          headers: { "Access-Control-Allow-Origin": "*" },
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST",
+          },
         });
       }
     }
 
-    return new Response("400 Bad Request", { status: 400 });
+    return new Response("404 Not Found", {
+      status: 404,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      },
+    });
   }
 
   static async setConfigs(req: Request): Promise<Response> {
@@ -117,11 +163,20 @@ export abstract class Camera {
     if (await this.setSettings(data)) {
       return new Response("200 OK", {
         status: 200,
-        headers: { "Access-Control-Allow-Origin": "*" },
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST",
+        },
       });
     }
 
-    return new Response("400 Bad Request", { status: 400 });
+    return new Response("404 Not Found", {
+      status: 404,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      },
+    });
   }
 
   static async updateConfigs(req: Request): Promise<Response> {
@@ -131,12 +186,21 @@ export abstract class Camera {
       if (await this.updateSettings(data)) {
         return new Response("200 OK", {
           status: 200,
-          headers: { "Access-Control-Allow-Origin": "*" },
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "PUT",
+          },
         });
       }
     }
 
-    return new Response("400 Bad Request", { status: 400 });
+    return new Response("404 Not Found", {
+      status: 404,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      },
+    });
   }
 
   static async deleteConfigs(req: Request): Promise<Response> {
@@ -145,11 +209,20 @@ export abstract class Camera {
     if (await this.removeSettings(data)) {
       return new Response("200 OK", {
         status: 200,
-        headers: { "Access-Control-Allow-Origin": "*" },
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "DELETE",
+        },
       });
     }
 
-    return new Response("400 Bad Request", { status: 400 });
+    return new Response("404 Not Found", {
+      status: 404,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      },
+    });
   }
 
   // MARK: Internal
@@ -282,6 +355,13 @@ export abstract class Camera {
         await write(file("./mediamtx/config/current.txt"), id);
         if ((await file("mediamtx.yml").text()) === save) {
           this._current = id;
+          if (this._camOn) {
+            (async () => {
+              await this.turnOff();
+              await sleep(1);
+              await this.turnOn();
+            })();
+          }
           return true;
         }
       }
