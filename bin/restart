@@ -4,5 +4,10 @@
 # start
 # ****************************************************************
 
+sudo fuser -k 2222/tcp &
+sleep 1
+cd ~/webssh2/app
+bun start &
+
 cd ~/stream-cam
 bun start:force

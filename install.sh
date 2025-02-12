@@ -27,7 +27,16 @@ source ~/.bashrc
 
 sudo setcap cap_net_bind_service=+ep $(which bun)
 
+git clone https://github.com/billchurch/webssh2
+cd webssh2
+git checkout current
+cd app
+bun i --production
+
+cd ~
 git clone -b dev https://github.com/JiningLiu/stream-cam.git
-cd stream-cam/bin
+cd stream-cam
+bun i
+cd bin
 chmod a+x setup
 ./setup

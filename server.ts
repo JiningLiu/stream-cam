@@ -12,6 +12,7 @@
 
 import { $, env, serve, sleep } from "bun";
 
+import { System } from "./supplements/handlers/System";
 import { Camera } from "./supplements/handlers/Camera";
 import { Statics } from "./supplements/handlers/Statics";
 
@@ -101,6 +102,12 @@ try {
   // MARK: POST requst handlers
   async function postHandler(req: Request, path: string): Promise<Response> {
     switch (path) {
+      case "/services/restart":
+        return await System.restart();
+      case "/device/reboot":
+        return await System.reboot();
+      case "/device/shutdown":
+        return await System.shutdown();
       case "/camera/on":
         return await Camera.turnOn();
       case "/camera/off":

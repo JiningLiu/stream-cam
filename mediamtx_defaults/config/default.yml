@@ -525,7 +525,7 @@ pathDefaults:
   # Saturation [0, 16]
   rpiCameraSaturation: 1
   # Sharpness [0, 16]
-  rpiCameraSharpness: 2
+  rpiCameraSharpness: 1
   # Exposure mode.
   # values: normal, short, long, custom
   rpiCameraExposure: normal

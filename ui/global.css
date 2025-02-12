@@ -6,6 +6,7 @@
 	--bg-color-2: #f5f5f5;
 	--bg-color-3: #eaeaea;
 	--bg-color-4: #e3e3e3;
+	--shadow-color: #2c2c2c22;
 
 	@media (prefers-color-scheme: dark) {
 		color: white;
@@ -15,6 +16,7 @@
 		--bg-color-2: #151515;
 		--bg-color-3: #222;
 		--bg-color-4: #2c2c2c;
+		--shadow-color: #e3e3e322;
 	}
 
 	margin: 0;

@@ -25,14 +25,6 @@ bun dev
 bun start
 ```
 
-### Before Commits
-
-> ‼️ This is **very important** to avoid testing data from being pushed
-
-```bash
-bun prep
-```
-
 ## Installation
 
 > ❗ This script installs the latest version in the **development** branch. Please only use for testing purposes.

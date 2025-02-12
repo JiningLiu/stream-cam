@@ -4,5 +4,10 @@
 # start
 # ****************************************************************
 
+if ! sudo lsof -ti :2222 >/dev/null ; then
+  cd ~/webssh2/app
+  bun start &
+fi
+
 cd ~/stream-cam
 bun start

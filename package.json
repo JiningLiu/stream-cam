@@ -20,9 +20,7 @@
 
     "stop-mac": "echo 'Stopping stream-cam servers...' && lsof -i tcp:20240 | awk 'NR!=1 {print $2}' | xargs -r kill & lsof -i tcp:80 | awk 'NR!=1 {print $2}' | xargs -r kill",
     "stop-mac:backend": "echo 'Stopping stream-cam backend server...' && lsof -i tcp:20240 | awk 'NR!=1 {print $2}' | xargs -r kill",
-    "stop-mac:ui": "echo 'Stopping stream-cam UI server...' && lsof -i tcp:80 | awk 'NR!=1 {print $2}' | xargs -r kill",
-
-    "prep": "echo 'Preparing stream-cam for push...' && echo '[]' > ./mediamtx/config/settings.json && echo '' > ./mediamtx/config/current.txt"
+    "stop-mac:ui": "echo 'Stopping stream-cam UI server...' && lsof -i tcp:80 | awk 'NR!=1 {print $2}' | xargs -r kill"
   },
   "devDependencies": {
     "@types/bun": "latest"
