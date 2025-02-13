@@ -2,7 +2,7 @@
 // stream-cam
 // Live stream camera system based on the Raspberry Pi 5 and Camera Module 3.
 //
-// UI server
+// Extensions server
 //
 // Open source information to come.
 // © 2024-2025 Jining Liu, FTC Team 20240 Slingshot, and contributors. All rights reserved.
@@ -12,9 +12,9 @@
 
 import { $, env, serve, sleep } from "bun";
 
-import { respond } from "./supplements/handlers/UI";
+import { respond } from "./supplements/handlers/Extensions";
 
-const port = env.PORT || 80;
+const port = env.PORT || 6400;
 const force =
   env.FORCE == "TRUE" ? true : env.FORCE == "FALSE" ? false : undefined;
 const isMac = env.MAC == "TRUE" ? true : env.FORCE == "MAC" ? false : undefined;
@@ -59,12 +59,7 @@ try {
       }
 
       const url = new URL(req.url);
-      let path = url.pathname;
-      if (path === "/") path = "/index.html";
-      if (!path.includes(".")) {
-        path = `${path}.html`;
-      }
-      return respond(path);
+      return respond(url.pathname);
     },
   });
 }

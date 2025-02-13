@@ -44,6 +44,7 @@ bun start # start inactive/idle server(s)
 bun start:force # kill existing instances & start servers
 bun start:backend # start backend server (asks if existing should be killed)
 bun start:ui # start UI server (asks if existing should be killed)
+bun start:extensions # start extensions server (asks if existing should be killed)
 ```
 
 ### Development
@@ -53,6 +54,17 @@ bun dev
 bun dev:force
 bun dev:backend
 bun dev:ui
+bun dev:extensions
+```
+
+### Development (macOS)
+
+```bash
+bun dev-mac
+bun dev-mac:force
+bun dev-mac:backend
+bun dev-mac:ui
+bun dev-mac:extensions
 ```
 
 ### Stopping (RPi)
@@ -61,6 +73,7 @@ bun dev:ui
 bun stop # kill both servers
 bun stop:backend # kills backend server
 bun stop:ui # kills UI server
+bun stop:extensions # kills extensions server
 ```
 
 ### Stopping (macOS)
@@ -69,6 +82,7 @@ bun stop:ui # kills UI server
 bun stop-mac
 bun stop-mac:backend
 bun stop-mac:ui
+bun stop-mac:extensions
 ```
 
 ## Licenses
@@ -82,6 +96,8 @@ bun stop-mac:ui
 [eemeli/yaml](https://github.com/eemeli/yaml) ([ISC License](https://github.com/eemeli/yaml/blob/main/LICENSE))
 
 [uuidjs/uuid](https://github.com/uuidjs/uuid) ([MIT License](https://github.com/uuidjs/uuid/blob/main/LICENSE.md))
+
+[billchurch/webssh2](https://github.com/billchurch/webssh2) ([MIT License](https://github.com/billchurch/webssh2/blob/main/LICENSE))
 
 ### stream-cam
 

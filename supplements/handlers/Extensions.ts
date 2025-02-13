@@ -1,10 +1,12 @@
 // ****************************************************************
 // stream-cam server supplement - handlers
-// UI
+// Extensions
 // ****************************************************************
 
 export async function respond(path: string): Promise<Response> {
-  const file = await Bun.file(`./ui${path}`);
+  const file = await Bun.file(
+    `./extensions${path}${path.endsWith("/") ? "index.html" : ""}`
+  );
 
   if (await file.exists()) {
     return new Response(file, {
