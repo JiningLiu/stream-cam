@@ -12,8 +12,6 @@
 
 import { $, env, serve, sleep } from "bun";
 
-import { respond } from "./supplements/handlers/Extensions";
-
 const port = env.PORT || 6400;
 const force =
   env.FORCE == "TRUE" ? true : env.FORCE == "FALSE" ? false : undefined;
@@ -58,8 +56,22 @@ try {
         });
       }
 
-      const url = new URL(req.url);
-      return respond(url.pathname);
+      if (req.method === "POST") {
+        const path = new URL(req.url).pathname;
+        // VERY TEMPORARY FOR ONE EXTENSION ONLY
+        (async () => {
+          await $`PORT=6401 bun ./extensions${path}`;
+        })();
+        return new Response("200 OK", {
+          status: 200,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST",
+          },
+        });
+      }
+
+      return new Response("404 Not Found", { status: 404 });
     },
   });
 }
