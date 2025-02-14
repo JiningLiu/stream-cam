@@ -22,15 +22,15 @@
     "dev-mac:ui": "echo 'DEVELOPMENT | Starting stream-cam UI server...' && PORT=8080 ENVIRONMENT=DEVELOPMENT MAC=TRUE bun uiServer.ts",
     "dev-mac:extensions": "echo 'DEVELOPMENT | Starting stream-cam extensions server...' && ENVIRONMENT=DEVELOPMENT MAC=TRUE bun extensionsServer.ts",
 
-    "stop": "echo 'Stopping stream-cam servers...' && sudo fuser -k 20240/tcp & sudo fuser -k 80/tcp & sudo fuser -k 6400/tcp &",
+    "stop": "echo 'Stopping stream-cam servers...' && sudo fuser -k 20240/tcp & sudo fuser -k 80/tcp & sudo fuser -k 6400/tcp & sudo fuser -k 6401/tcp &",
     "stop:backend": "echo 'Stopping stream-cam backend server...' && sudo fuser -k 20240/tcp",
     "stop:ui": "echo 'Stopping stream-cam UI server...' && sudo fuser -k 80/tcp",
     "stop:extensions": "echo 'Stopping stream-cam extensions server...' && sudo fuser -k 6400/tcp",
 
-    "stop-mac": "echo 'Stopping stream-cam servers...' && lsof -i tcp:20240 | awk 'NR!=1 {print $2}' | xargs -r kill & lsof -i tcp:8080 | awk 'NR!=1 {print $2}' | xargs -r kill & lsof -i tcp:6400 | awk 'NR!=1 {print $2}' | xargs -r kill &",
+    "stop-mac": "echo 'Stopping stream-cam servers...' && lsof -i tcp:20240 | awk 'NR!=1 {print $2}' | xargs -r kill & lsof -i tcp:8080 | awk 'NR!=1 {print $2}' | xargs -r kill & lsof -i tcp:6400 | awk 'NR!=1 {print $2}' | xargs -r kill & lsof -i tcp:6401 | awk 'NR!=1 {print $2}' | xargs -r kill &",
     "stop-mac:backend": "echo 'Stopping stream-cam backend server...' && lsof -i tcp:20240 | awk 'NR!=1 {print $2}' | xargs -r kill",
     "stop-mac:ui": "echo 'Stopping stream-cam UI server...' && lsof -i tcp:8080 | awk 'NR!=1 {print $2}' | xargs -r kill",
-    "stop-mac:extensions": "echo 'Stopping stream-cam extensions server...' && lsof -i tcp:6400 | awk 'NR!=1 {print $2}' | xargs -r kill"
+    "stop-mac:extensions": "echo 'Stopping stream-cam extensions server...' && lsof -i tcp:6400 | awk 'NR!=1 {print $2}' | xargs -r kill & lsof -i tcp:6401 | awk 'NR!=1 {print $2}' | xargs -r kill"
   },
   "devDependencies": {
     "@types/bun": "latest"
