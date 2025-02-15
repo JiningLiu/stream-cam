@@ -11,10 +11,14 @@
 # A free & (planned) open source project created by Jining Liu.
 # ****************************************************************
 
-cd ~/webssh2
-git stash save --keep-index --include-untracked
-git pull
-bun i
+stop
+cam off
+
+# cd ~/webssh2
+# git stash save --keep-index --include-untracked
+# git pull
+# cd app
+# bun i --production
 
 cd ~/stream-cam
 git stash save --keep-index --include-untracked
@@ -22,3 +26,5 @@ git pull
 bun i
 
 chmod -R a+x bin/*
+
+start
