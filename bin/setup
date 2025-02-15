@@ -19,6 +19,7 @@ cp mediamtx_defaults/config/default.yml mediamtx.yml
 
 chmod -R a+x bin/*
 
+source ~/.bashrc
 echo -en '\n' >> ~/.bashrc
 echo "# stream-cam" >> ~/.bashrc
 echo "export PATH=~/stream-cam/bin:$PATH" >> ~/.bashrc
