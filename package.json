@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
 
-    "start": "echo 'PRODUCTION | Starting stream-cam idle servers...' && ENVIRONMENT=PRODUCTION FORCE=FALSE bun server.ts & ENVIRONMENT=PRODUCTION FORCE=FALSE bun uiServer.ts & ENVIRONMENT=PRODUCTION bun extensionsServer.ts &",
+    "start": "echo 'PRODUCTION | Starting stream-cam idle servers...' && ENVIRONMENT=PRODUCTION FORCE=FALSE bun server.ts & ENVIRONMENT=PRODUCTION FORCE=FALSE bun uiServer.ts & ENVIRONMENT=PRODUCTION FORCE=FALSE bun extensionsServer.ts &",
     "start:force": "echo 'PRODUCTION | Starting stream-cam servers (forced)...' && ENVIRONMENT=PRODUCTION FORCE=TRUE bun server.ts & ENVIRONMENT=PRODUCTION FORCE=TRUE bun uiServer.ts & ENVIRONMENT=PRODUCTION FORCE=TRUE bun extensionsServer.ts &",
     "start:backend": "echo 'PRODUCTION | Starting stream-cam backend server...' && ENVIRONMENT=PRODUCTION bun server.ts",
     "start:ui": "echo 'PRODUCTION | Starting stream-cam UI server...' && ENVIRONMENT=PRODUCTION bun uiServer.ts",
