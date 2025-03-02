@@ -17,7 +17,7 @@
     "dev:extensions": "echo 'DEVELOPMENT | Starting stream-cam extensions server...' && ENVIRONMENT=DEVELOPMENT bun extensionsServer.ts",
 
     "dev-mac": "echo 'DEVELOPMENT | Starting stream-cam idle servers...' && ENVIRONMENT=DEVELOPMENT FORCE=FALSE MAC=TRUE bun server.ts & PORT=8080 ENVIRONMENT=DEVELOPMENT FORCE=FALSE MAC=TRUE bun uiServer.ts & ENVIRONMENT=DEVELOPMENT FORCE=FALSE MAC=TRUE bun extensionsServer.ts &",
-    "dev-mac:force": "echo 'DEVELOPMENT | Starting stream-cam servers (forced)...' && ENVIRONMENT=DEVELOPMENT FORCE=TRUE MAC=TRUE bun server.ts & ENVIRONMENT=DEVELOPMENT FORCE=TRUE MAC=TRUE bun uiServer.ts & ENVIRONMENT=DEVELOPMENT FORCE=TRUE MAC=TRUE bun extensionsServer.ts &",
+    "dev-mac:force": "echo 'DEVELOPMENT | Starting stream-cam servers (forced)...' && ENVIRONMENT=DEVELOPMENT FORCE=TRUE MAC=TRUE bun server.ts & PORT=8080 ENVIRONMENT=DEVELOPMENT FORCE=TRUE MAC=TRUE bun uiServer.ts & ENVIRONMENT=DEVELOPMENT FORCE=TRUE MAC=TRUE bun extensionsServer.ts &",
     "dev-mac:backend": "echo 'DEVELOPMENT | Starting stream-cam backend server...' && ENVIRONMENT=DEVELOPMENT MAC=TRUE bun server.ts",
     "dev-mac:ui": "echo 'DEVELOPMENT | Starting stream-cam UI server...' && PORT=8080 ENVIRONMENT=DEVELOPMENT MAC=TRUE bun uiServer.ts",
     "dev-mac:extensions": "echo 'DEVELOPMENT | Starting stream-cam extensions server...' && ENVIRONMENT=DEVELOPMENT MAC=TRUE bun extensionsServer.ts",

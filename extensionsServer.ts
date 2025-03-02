@@ -10,7 +10,7 @@
 // A free & (planned) open source project created by Jining Liu.
 // ****************************************************************
 
-import { $, env, serve, sleep } from "bun";
+import { $, env, serve, sleep, file } from "bun";
 
 const port = env.PORT || 6400;
 const force =
@@ -58,17 +58,29 @@ try {
 
       if (req.method === "POST") {
         const path = new URL(req.url).pathname;
-        // VERY TEMPORARY FOR ONE EXTENSION ONLY
-        (async () => {
-          await $`PORT=6401 bun ./extensions${path}`;
-        })();
-        return new Response("200 OK", {
-          status: 200,
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "POST",
-          },
-        });
+
+        const config = await file(`./extensions${path}/config.json`);
+
+        if (await config.exists()) {
+
+          const json = await config.json();
+          const port = json['port'];
+
+          if (port && port > 6400 && port < 6500) {
+
+            (async () => {
+              await $`PORT=${port} bun ./extensions${path}`;
+            })();
+
+            return new Response("200 OK", {
+              status: 200,
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "POST",
+              },
+            });
+          }
+        }
       }
 
       return new Response("404 Not Found", { status: 404 });
