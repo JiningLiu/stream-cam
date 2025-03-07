@@ -42,6 +42,8 @@ try {
   }
 } catch {
 } finally {
+  const extensions = await file("./extensions/extensions.json").json();
+
   const server = serve({
     port: port,
     async fetch(req) {
@@ -56,34 +58,121 @@ try {
         });
       }
 
-      if (req.method === "POST") {
-        const path = new URL(req.url).pathname;
+      const url = new URL(req.url);
 
-        const config = await file(`./extensions${path}/config.json`);
+      // GET requests
+      if (req.method === "GET") return getHandler(req, url.pathname);
 
-        if (await config.exists()) {
+      // POST requests
+      if (req.method === "POST") return postHandler(req, url.pathname);
 
-          const json = await config.json();
-          const port = json['port'];
+      // PUT requests
+      if (req.method === "PUT") return putHandler(req, url.pathname);
 
-          if (port && port > 6400 && port < 6500) {
+      return new Response("404 Not Found", { status: 404 });
+    },
+  });
 
-            (async () => {
-              await $`PORT=${port} bun ./extensions${path}`;
-            })();
+  // MARK: GET requst handlers
+  async function getHandler(req: Request, path: string): Promise<Response> {
+    switch (path) {
+      case "/all":
+        return new Response(JSON.stringify(extensions), {
+          status: 200,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET",
+          },
+        });
+      default:
+        // if (
+        //   extensions.some(
+        //     (extension: any) =>
+        //       // todo: fix any type
+        //       extension.user == path.split("/")[1] &&
+        //       extension.repo == path.split("/")[2]
+        //   )
+        // ) {
+          const config = await file(`./extensions${path}/config.json`);
 
-            return new Response("200 OK", {
+          if (await config.exists()) {
+            const json = await config.json();
+
+            return new Response(JSON.stringify(json), {
               status: 200,
               headers: {
                 "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "POST",
+                "Access-Control-Allow-Methods": "GET",
               },
             });
           }
-        }
-      }
+        // }
 
-      return new Response("404 Not Found", { status: 404 });
+        return new Response("404 Not Found", {
+          status: 404,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          },
+        });
+    }
+  }
+
+  // MARK: POST requst handlers
+  async function postHandler(req: Request, path: string): Promise<Response> {
+    const config = await file(`./extensions${path}/config.json`);
+
+    if (await config.exists()) {
+      const json = await config.json();
+      const port = json["port"];
+
+      if (port && port > 6400 && port < 6500) {
+        (async () => {
+          await $`PORT=${port} bun ./extensions${path}`;
+        })();
+
+        return new Response("200 OK", {
+          status: 200,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST",
+          },
+        });
+      }
+    }
+
+    // todo: return bad request instead
+    return new Response("404 Not Found", {
+      status: 404,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      },
+    });
+  }
+}
+
+// MARK: PUT requst handlers
+async function putHandler(req: Request, path: string): Promise<Response> {
+  const config = await file(`./extensions${path}/config.json`);
+
+  if (await config.exists()) {
+    // todo: update the jsawns (jsons get it haha im so not funny)
+
+    return new Response("200 OK", {
+      status: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "PUT",
+      },
+    });
+  }
+
+  return new Response("404 Not Found", {
+    status: 404,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
     },
   });
 }

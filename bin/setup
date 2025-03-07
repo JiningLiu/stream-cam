@@ -14,6 +14,7 @@
 cd ~/stream-cam
 
 mkdir extensions
+echo "[]" > extensions/extensions.json
 cp -r mediamtx_defaults mediamtx
 cp mediamtx_defaults/config/default.yml mediamtx.yml
 
