@@ -85,20 +85,30 @@ try {
           },
         });
       default:
-        // if (
-        //   extensions.some(
-        //     (extension: any) =>
-        //       // todo: fix any type
-        //       extension.user == path.split("/")[1] &&
-        //       extension.repo == path.split("/")[2]
-        //   )
-        // ) {
-          const config = await file(`./extensions${path}/config.json`);
+        let extension = path;
 
-          if (await config.exists()) {
-            const json = await config.json();
+        if (path.startsWith("/status")) {
+          extension = path.replace("/status", "");
+        }
 
-            return new Response(JSON.stringify(json), {
+        const config = await file(`./extensions${extension}/config.json`);
+
+        if (await config.exists()) {
+          const json = await config.json();
+
+          if (path.startsWith("/status")) {
+            let extensionLength = 0;
+
+            try {
+              const mediamtx = await $`lsof -i :${json["port"]}`;
+              extensionLength = mediamtx.stdout.toString().trim().length;
+            } catch {}
+
+            const status = {
+              isOn: extensionLength > 0,
+            };
+
+            return new Response(JSON.stringify(status), {
               status: 200,
               headers: {
                 "Access-Control-Allow-Origin": "*",
@@ -106,7 +116,15 @@ try {
               },
             });
           }
-        // }
+
+          return new Response(JSON.stringify(json), {
+            status: 200,
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": "GET",
+            },
+          });
+        }
 
         return new Response("404 Not Found", {
           status: 404,
@@ -120,30 +138,50 @@ try {
 
   // MARK: POST requst handlers
   async function postHandler(req: Request, path: string): Promise<Response> {
-    const config = await file(`./extensions${path}/config.json`);
+    let extension = path;
 
-    if (await config.exists()) {
-      const json = await config.json();
-      const port = json["port"];
+    if (path.startsWith("/toggle")) {
+      extension = path.replace("/toggle", "");
 
-      if (port && port > 6400 && port < 6500) {
-        (async () => {
-          await $`PORT=${port} bun ./extensions${path}`;
-        })();
+      const config = await file(`./extensions${extension}/config.json`);
 
-        return new Response("200 OK", {
-          status: 200,
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "POST",
-          },
-        });
+      if (await config.exists()) {
+        const json = await config.json();
+        const port = json["port"];
+
+        if (port && port > 6400 && port < 6500) {
+          let extensionLength = 0;
+
+          try {
+            const mediamtx = await $`lsof -i :${port}`;
+            extensionLength = mediamtx.stdout.toString().trim().length;
+          } catch {}
+
+          (async () => {
+            if (extensionLength <= 0) {
+              await $`PORT=${port} bun ./extensions${extension}`;
+            } else {
+              if (isMac == true) {
+                await $`lsof -i tcp:${port} | awk 'NR!=1 {print $2}' | xargs -r kill`;
+              } else {
+                await $`sudo fuser -k ${port}/tcp`;
+              }
+            }
+          })();
+
+          return new Response("200 OK", {
+            status: 200,
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": "POST",
+            },
+          });
+        }
       }
     }
 
-    // todo: return bad request instead
-    return new Response("404 Not Found", {
-      status: 404,
+    return new Response("400 Bad Request", {
+      status: 400,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
