@@ -2,6 +2,7 @@
 	color: black;
 	--primary-color: black;
 	--secondary-color: #888;
+	--action-color: #1177cc;
 	--bg-color-1: #fff;
 	--bg-color-2: #f5f5f5;
 	--bg-color-3: #eaeaea;
@@ -12,6 +13,7 @@
 		color: white;
 		--primary-color: white;
 		--secondary-color: #aaa;
+		--action-color: #44aaff;
 		--bg-color-1: #000;
 		--bg-color-2: #151515;
 		--bg-color-3: #222;
@@ -89,6 +91,10 @@ l4 {
 p,
 footer {
 	font-size: 1rem;
+}
+
+a {
+	text-decoration: none;
 }
 
 footer {
