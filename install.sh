@@ -23,7 +23,10 @@ sudo apt install -f && sudo apt autoremove -y && sudo apt autoclean && sudo apt 
 sudo chown -R $USER:$USER $HOME/
 
 curl -fsSL https://bun.sh/install | bash -s "bun-v1.2.5"
+echo "Awaiting installation of bun to finish..."
+sleep 2
 source ~/.bashrc
+echo "Bun in ~/.bashrc sourced."
 
 sudo setcap cap_net_bind_service=+ep $(which bun)
 
