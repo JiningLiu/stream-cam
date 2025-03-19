@@ -13,8 +13,8 @@
 
 cd ~
 
-sudo apt update
-sudo apt upgrade -y
+# sudo apt update
+# sudo apt upgrade -y
 
 sudo apt install lsof vim git ffmpeg adb pulseaudio gstreamer1.0-tools gstreamer1.0-rtsp gstreamer1.0-alsa alsa-utils -y
 
@@ -22,14 +22,14 @@ sudo apt install -f && sudo apt autoremove -y && sudo apt autoclean && sudo apt 
 
 sudo chown -R $USER:$USER $HOME/
 
-curl -fsSL https://bun.sh/install | bash
+curl -fsSL https://bun.sh/install | bash -s "bun-v1.2.5"
 source ~/.bashrc
 
 sudo setcap cap_net_bind_service=+ep $(which bun)
 
 git clone https://github.com/billchurch/webssh2
 cd webssh2
-git checkout current
+git checkout 9c0ba04b31e92b7ed20e5c3509b5cbcc5447f565
 cd app
 bun i --production
 

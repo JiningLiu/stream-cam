@@ -175,6 +175,6 @@ dist
 .DS_Store
 
 # stream-cam
-extensions/
-mediamtx.yml
-mediamtx/
+/extensions/
+/mediamtx.yml
+/mediamtx/
