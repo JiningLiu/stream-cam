@@ -29,13 +29,13 @@ echo "stream-cam: bun path exported."
 sudo setcap cap_net_bind_service=+ep $(which bun)
 
 cd ~
-
 git clone https://github.com/billchurch/webssh2
 cd webssh2
 git checkout 0.4.6
 cd app
 bun i --production
 
+cd ~
 git clone -b dev https://github.com/JiningLiu/stream-cam.git
 cd stream-cam
 bun i

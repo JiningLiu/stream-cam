@@ -29,9 +29,25 @@ bun start
 
 > ❗ This script installs the latest version in the **development** branch. Please only use for testing purposes.
 
+Before installation, make sure you have a **fresh, clean** installation of Raspberry Pi OS 64-bit Lite from **November 19th, 2024**. ([Download](https://downloads.raspberrypi.com/raspios_lite_arm64/images/raspios_lite_arm64-2024-11-19/2024-11-19-raspios-bookworm-arm64-lite.img.xz))
+
+We recommend you use a separate microSD card if your RPi is also being used for another purpose. Doing a fresh installation ensures compatibility and ease of debugging.
+
+Prior to running the installation script, please run:
+
+```bash
+sudo raspi-config
+```
+
+...and setup console auto-login and your locale.
+
+Last but not least, simply run the command below to fetch and run the installation script.
+
 ```bash
 curl https://raw.githubusercontent.com/JiningLiu/stream-cam/refs/heads/dev/install.sh | bash
 ```
+
+Your RPi will restart at the end of the first installation step. The process will automatically finish upon reboot and the servers will be started automatically. The installation process make take several minutes or more depending on your internet speed.
 
 ## Scripts
 
@@ -47,7 +63,7 @@ bun start:ui # start UI server (asks if existing should be killed)
 bun start:extensions # start extensions server (asks if existing should be killed)
 ```
 
-### Development
+### Development (RPi)
 
 ```bash
 bun dev
