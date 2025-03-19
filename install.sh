@@ -13,7 +13,7 @@
 
 cd ~
 
-# sudo apt update
+sudo apt update
 # sudo apt upgrade -y
 
 sudo apt install lsof vim git ffmpeg adb pulseaudio gstreamer1.0-tools gstreamer1.0-rtsp gstreamer1.0-alsa alsa-utils -y
@@ -23,11 +23,9 @@ sudo apt install -f && sudo apt autoremove -y && sudo apt autoclean && sudo apt 
 sudo chown -R $USER:$USER $HOME/
 
 curl -fsSL https://bun.sh/install | bash -s "bun-v1.2.5"
-echo "Awaiting installation of bun to finish..."
-sleep 2
-source ~/.bashrc
-echo "Bun in ~/.bashrc sourced."
-
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+echo "stream-cam: bun path exported."
 sudo setcap cap_net_bind_service=+ep $(which bun)
 
 git clone https://github.com/billchurch/webssh2
