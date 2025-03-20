@@ -104,7 +104,7 @@ try {
               const extensionStatus = isMac
                 ? await $`lsof -i :${port}`
                 : await $`pgrep -f "${extension}"`;
-              console.error(extensionStatus.stdout.toString().trim());
+              console.error(extensionStatus.stdout);
               // extensionLength = extensionStatus.stdout.toString().trim().length;
             } catch {}
 
@@ -161,7 +161,7 @@ try {
             const extensionStatus = isMac
               ? await $`lsof -i :${port}`
               : await $`pgrep -f "${extension}"`;
-            console.error(extensionStatus.stdout.toString().trim());
+              console.error(extensionStatus.stdout);
             // extensionLength = extensionStatus.stdout.toString().trim().length;
           } catch {}
 
