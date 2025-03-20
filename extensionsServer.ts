@@ -100,8 +100,10 @@ try {
             let extensionLength = 0;
 
             try {
-              const mediamtx = await $`lsof -i :${json["port"]}`;
-              extensionLength = mediamtx.stdout.toString().trim().length;
+              const status = isMac
+                ? await $`pgrep -f "${extension}"`
+                : await $`lsof -i :${port}`;
+              extensionLength = status.stdout.toString().trim().length;
             } catch {}
 
             const status = {
@@ -153,7 +155,9 @@ try {
           let extensionLength = 0;
 
           try {
-            const status = isMac ? await $`pgrep -f "${extension}"` : await $`lsof -i :${port}`;
+            const status = isMac
+              ? await $`pgrep -f "${extension}"`
+              : await $`lsof -i :${port}`;
             extensionLength = status.stdout.toString().trim().length;
           } catch {}
 
