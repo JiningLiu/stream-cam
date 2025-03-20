@@ -103,7 +103,7 @@ try {
             try {
               const status = isMac
                 ? await $`lsof -i :${port}`
-                : await $`ps aux | grep "${extension}" | grep -v grep`;
+                : await $`ps -C bun -o cmd | grep "${extension}" | grep -v grep || echo ""`;
               extensionLength = status.stdout.toString().trim().length;
             } catch (error) {
               console.error(`Error checking process status: ${error}`);
@@ -161,7 +161,7 @@ try {
           try {
             const status = isMac
               ? await $`lsof -i :${port}`
-              : await $`ps aux | grep "${extension}" | grep -v grep`;
+              : await $`ps -C bun -o cmd | grep "${extension}" | grep -v grep || echo ""`;
             extensionLength = status.stdout.toString().trim().length;
           } catch (error) {
             console.error(`Error checking process status: ${error}`);
