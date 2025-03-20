@@ -103,12 +103,9 @@ try {
             try {
               const status = isMac
                 ? await $`lsof -i :${port}`
-                : await $`ps -C bun -o cmd | grep "${extension}" | grep -v grep || echo ""`;
+                : await $`pgrep -f "extensions${extension}" || echo ""`;
               extensionLength = status.stdout.toString().trim().length;
-            } catch (error) {
-              console.error(`Error checking process status: ${error}`);
-              extensionLength = 0;
-            }
+            } catch {}
 
             const status = {
               isOn: extensionLength > 0,
@@ -161,12 +158,9 @@ try {
           try {
             const status = isMac
               ? await $`lsof -i :${port}`
-              : await $`ps -C bun -o cmd | grep "${extension}" | grep -v grep || echo ""`;
+              : await $`pgrep -f "extensions${extension}" || echo ""`;
             extensionLength = status.stdout.toString().trim().length;
-          } catch (error) {
-            console.error(`Error checking process status: ${error}`);
-            extensionLength = 0;
-          }
+          } catch {}
 
           (async () => {
             if (extensionLength <= 0) {
