@@ -101,11 +101,11 @@ try {
             let extensionLength = 0;
 
             try {
-              const status = isMac
+              const extensionStatus = isMac
                 ? await $`lsof -i :${port}`
                 : await $`pgrep -f "${extension}"`;
-              console.error(status.stdout.toString());
-              extensionLength = status.stdout.toString().trim().length;
+              console.error(extensionStatus.stdout.toString().trim());
+              extensionLength = extensionStatus.stdout.toString().trim().length;
             } catch {}
 
             const status = {
@@ -157,11 +157,11 @@ try {
           let extensionLength = 0;
 
           try {
-            const status = isMac
+            const extensionStatus = isMac
               ? await $`lsof -i :${port}`
               : await $`pgrep -f "${extension}"`;
-              console.error(status.stdout.toString());
-            extensionLength = status.stdout.toString().trim().length;
+            console.error(extensionStatus.stdout.toString().trim());
+            extensionLength = extensionStatus.stdout.toString().trim().length;
           } catch {}
 
           (async () => {
