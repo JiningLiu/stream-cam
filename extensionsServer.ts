@@ -170,6 +170,7 @@ try {
             } else {
               // Use the '|| true' to prevent exit code 1 from causing an error
               const status = await $`pgrep -f "${extension}" || true`;
+              console.error(status.stdout.toString());
               extensionLength = status.stdout.toString().trim().length;
             }
           } catch (error) {
