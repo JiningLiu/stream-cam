@@ -15,7 +15,7 @@ import { $, env, serve, sleep, file } from "bun";
 const port = env.PORT || 6400;
 const force =
   env.FORCE == "TRUE" ? true : env.FORCE == "FALSE" ? false : undefined;
-const isMac = env.MAC == "TRUE" ? true : env.FORCE == "MAC" ? false : undefined;
+const isMac = env.MAC == "TRUE";
 
 try {
   const result = await $`sudo lsof -ti :${port}`;
@@ -30,7 +30,7 @@ try {
     }
 
     if (kill) {
-      if (isMac == true) {
+      if (isMac) {
         await $`lsof -i tcp:${port} | awk 'NR!=1 {print $2}' | xargs -r kill`;
       } else {
         await $`sudo fuser -k ${port}/tcp`;
@@ -101,10 +101,10 @@ try {
             let extensionLength = 0;
 
             try {
-              const status =
-                isMac == true
-                  ? await $`lsof -i :${port}`
-                  : await $`pgrep -f "${extension}"`;
+              const status = await $`pgrep -f "${extension}"`;
+              // isMac
+              //   ? await $`lsof -i :${port}`
+              //   : await $`pgrep -f "${extension}"`;
               extensionLength = status.stdout.toString().trim().length;
             } catch {}
 
@@ -157,10 +157,10 @@ try {
           let extensionLength = 0;
 
           try {
-            const status =
-              isMac == true
-                ? await $`lsof -i :${port}`
-                : await $`pgrep -f "${extension}"`;
+            const status = await $`pgrep -f "${extension}"`;
+            // isMac
+            //   ? await $`lsof -i :${port}`
+            //   : await $`pgrep -f "${extension}"`;
             extensionLength = status.stdout.toString().trim().length;
           } catch {}
 
@@ -168,7 +168,7 @@ try {
             if (extensionLength <= 0) {
               await $`PORT=${port} bun ./extensions${extension}`;
             } else {
-              if (isMac == true) {
+              if (isMac) {
                 await $`lsof -i tcp:${port} | awk 'NR!=1 {print $2}' | xargs -r kill`;
               } else {
                 await $`sudo fuser -k ${port}/tcp`;

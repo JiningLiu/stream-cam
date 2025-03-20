@@ -19,7 +19,7 @@ import { Statics } from "./supplements/handlers/Statics";
 const port = env.PORT || 20240;
 const force =
   env.FORCE == "TRUE" ? true : env.FORCE == "FALSE" ? false : undefined;
-const isMac = env.MAC == "TRUE" ? true : env.FORCE == "MAC" ? false : undefined;
+const isMac = env.MAC == "TRUE";
 
 try {
   const result = await $`sudo lsof -ti :${port}`;
@@ -34,7 +34,7 @@ try {
     }
 
     if (kill) {
-      if (isMac == true) {
+      if (isMac) {
         await $`lsof -i tcp:${port} | awk 'NR!=1 {print $2}' | xargs -r kill`;
       } else {
         await $`sudo fuser -k ${port}/tcp`;
