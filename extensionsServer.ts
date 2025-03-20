@@ -105,7 +105,7 @@ try {
                 ? await $`lsof -i :${port}`
                 : await $`pgrep -f "${extension}"`;
               console.error(extensionStatus.stdout.toString().trim());
-              extensionLength = extensionStatus.stdout.toString().trim().length;
+              // extensionLength = extensionStatus.stdout.toString().trim().length;
             } catch {}
 
             return new Response(
@@ -162,7 +162,7 @@ try {
               ? await $`lsof -i :${port}`
               : await $`pgrep -f "${extension}"`;
             console.error(extensionStatus.stdout.toString().trim());
-            extensionLength = extensionStatus.stdout.toString().trim().length;
+            // extensionLength = extensionStatus.stdout.toString().trim().length;
           } catch {}
 
           (async () => {
