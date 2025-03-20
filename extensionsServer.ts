@@ -108,17 +108,18 @@ try {
               extensionLength = extensionStatus.stdout.toString().trim().length;
             } catch {}
 
-            const status = {
-              isOn: extensionLength > 0,
-            };
-
-            return new Response(JSON.stringify(status), {
-              status: 200,
-              headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "GET",
-              },
-            });
+            return new Response(
+              JSON.stringify({
+                isOn: extensionLength > 0,
+              }),
+              {
+                status: 200,
+                headers: {
+                  "Access-Control-Allow-Origin": "*",
+                  "Access-Control-Allow-Methods": "GET",
+                },
+              }
+            );
           }
 
           return new Response(JSON.stringify(json), {
