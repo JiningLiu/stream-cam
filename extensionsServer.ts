@@ -105,7 +105,6 @@ try {
                 const status = await $`lsof -i :${port}`;
                 extensionLength = status.stdout.toString().trim().length;
               } else {
-                // Use the '|| true' to prevent exit code 1 from causing an error
                 const status = await $`pgrep -f "${extension}" || true`;
                 extensionLength = status.stdout.toString().trim().length;
               }
@@ -168,17 +167,13 @@ try {
               const status = await $`lsof -i :${port}`;
               extensionLength = status.stdout.toString().trim().length;
             } else {
-              // Use the '|| true' to prevent exit code 1 from causing an error
               const status = await $`pgrep -f "${extension}" || true`;
-              console.error(status.stdout.toString().trim().length);
               extensionLength = status.stdout.toString().trim().length;
             }
           } catch (error) {
             console.error(`Error checking process status: ${error}`);
             extensionLength = 0;
           }
-
-          console.warn("mhm");
 
           (async () => {
             if (extensionLength <= 0) {

@@ -37,9 +37,9 @@ export abstract class Camera {
     let audiosourceLength = 0;
 
     try {
-      const mediamtx = await $`pgrep -f "mediamtx"`;
+      const mediamtx = await $`pgrep -f "mediamtx" || true`;
       mediamtxLength = mediamtx.stdout.toString().trim().length;
-      const audiosource = await $`pgrep -f "audiosource"`;
+      const audiosource = await $`pgrep -f "audiosource" || true`;
       audiosourceLength = audiosource.stdout.toString().trim().length;
     } catch {}
 
