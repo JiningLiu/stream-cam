@@ -101,11 +101,18 @@ try {
             let extensionLength = 0;
 
             try {
-              const extensionStatus = isMac
-                ? await $`lsof -i :${port}`
-                : await $`pgrep -f "${extension}"`;
-              // extensionLength = extensionStatus.stdout.toString().trim().length;
-            } catch {}
+              if (isMac) {
+                const status = await $`lsof -i :${port}`;
+                extensionLength = status.stdout.toString().trim().length;
+              } else {
+                // Use the '|| true' to prevent exit code 1 from causing an error
+                const status = await $`pgrep -f "${extension}" || true`;
+                extensionLength = status.stdout.toString().trim().length;
+              }
+            } catch (error) {
+              console.error(`Error checking process status: ${error}`);
+              extensionLength = 0;
+            }
 
             return new Response(
               JSON.stringify({
@@ -157,15 +164,26 @@ try {
           let extensionLength = 0;
 
           try {
-            const extensionStatus = isMac
-              ? await $`lsof -i :${port}`
-              : await $`pgrep -f "${extension}"`;
-            // extensionLength = extensionStatus.stdout.toString().trim().length;
-          } catch {}
+            if (isMac) {
+              const status = await $`lsof -i :${port}`;
+              extensionLength = status.stdout.toString().trim().length;
+            } else {
+              // Use the '|| true' to prevent exit code 1 from causing an error
+              const status = await $`pgrep -f "${extension}" || true`;
+              extensionLength = status.stdout.toString().trim().length;
+            }
+          } catch (error) {
+            console.error(`Error checking process status: ${error}`);
+            extensionLength = 0;
+          }
 
           (async () => {
             if (extensionLength <= 0) {
-              await $`PORT=${port} bun ./extensions${extension}`;
+              try {
+                await $`PORT=${port} bun ./extensions${extension}`;
+              } catch (error) {
+                console.error(`Error starting extension: ${error}`);
+              }
             } else {
               if (isMac) {
                 await $`lsof -i tcp:${port} | awk 'NR!=1 {print $2}' | xargs -r kill`;
