@@ -153,8 +153,8 @@ try {
           let extensionLength = 0;
 
           try {
-            const mediamtx = await $`lsof -i :${port}`;
-            extensionLength = mediamtx.stdout.toString().trim().length;
+            const status = isMac ? await $`pgrep -f "${extension}"` : await $`lsof -i :${port}`;
+            extensionLength = status.stdout.toString().trim().length;
           } catch {}
 
           (async () => {
