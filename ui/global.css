@@ -4,9 +4,10 @@
 	--secondary-color: #888;
 	--action-color: #1177cc;
 	--bg-color-1: #fff;
-	--bg-color-2: #f5f5f5;
-	--bg-color-3: #eaeaea;
-	--bg-color-4: #e3e3e3;
+	--bg-color-2: #fafafa;
+	--bg-color-3: #f2f2f2;
+	--bg-color-4: #ececec;
+	--bg-color-5: #e3e3e3;
 	--shadow-color: #2c2c2c22;
 
 	@media (prefers-color-scheme: dark) {
@@ -15,9 +16,10 @@
 		--secondary-color: #aaa;
 		--action-color: #44aaff;
 		--bg-color-1: #000;
-		--bg-color-2: #151515;
-		--bg-color-3: #222;
-		--bg-color-4: #2c2c2c;
+		--bg-color-2: #080808;
+		--bg-color-3: #151515;
+		--bg-color-4: #222;
+		--bg-color-5: #2c2c2c;
 		--shadow-color: #e3e3e322;
 	}
 
@@ -151,7 +153,7 @@ footer {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: var(--bg-color-4);
+	background: var(--bg-color-5);
 	transition: all ease-out 0.2s;
 }
 
@@ -162,9 +164,13 @@ footer {
 	width: 1.1rem;
 	left: 0.15rem;
 	bottom: 0.15rem;
-	background: var(--bg-color-1);
+	background: #fff;
 	-webkit-transition: 0.4s;
 	transition: all ease-out 0.2s;
+
+	@media (prefers-color-scheme: dark) {
+		background: #ddd;
+	}
 }
 
 input:checked + .slider {
