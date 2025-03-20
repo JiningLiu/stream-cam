@@ -95,14 +95,16 @@ try {
 
         if (await config.exists()) {
           const json = await config.json();
+          const port = json["port"];
 
           if (path.startsWith("/status")) {
             let extensionLength = 0;
 
             try {
-              const status = isMac
-                ? await $`lsof -i :${port}`
-                : await $`pgrep -f "${extension}"`;
+              const status =
+                isMac == true
+                  ? await $`lsof -i :${port}`
+                  : await $`pgrep -f "${extension}"`;
               extensionLength = status.stdout.toString().trim().length;
             } catch {}
 
@@ -155,9 +157,10 @@ try {
           let extensionLength = 0;
 
           try {
-            const status = isMac
-              ? await $`lsof -i :${port}`
-              : await $`pgrep -f "${extension}"`;
+            const status =
+              isMac == true
+                ? await $`lsof -i :${port}`
+                : await $`pgrep -f "${extension}"`;
             extensionLength = status.stdout.toString().trim().length;
           } catch {}
 
