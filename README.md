@@ -8,12 +8,10 @@ stream-cam
 </b>
 </p>
 
-> ### This project is in early development. Please check back in the future for more information.
+> ### This project was ended in early development. A new system is in development.
 
 > For the original stream-cam project, visit [JiningLiu/stream-cam-legacy](https://github.com/JiningLiu/stream-cam-legacy)
 
 ## License
-
-Open source information to come.
 
 © 2024-2025 Jining Liu, FTC Team 20240 Slingshot, and contributors. All rights reserved.
